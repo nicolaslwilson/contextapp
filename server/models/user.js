@@ -7,7 +7,7 @@ var SALT_WORK_FACTOR = 10;
 var UserSchema = new Schema({
     username: {type: String, required: true, index: {unique: true}},
     password: {type: String, required: true},
-    contactList: Array,
+    contactList: [String],
     contactRequests: Array,
     conversations: Array
 });

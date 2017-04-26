@@ -1,0 +1,19 @@
+<div class="container" ng-click="click()">
+    <h1 id="welcome" class="lead">Welcome, {{chat.user.userObject.username}}!</h1>
+    <div class="row">
+      <div class="col-md-4">
+        <h3>Contacts</h3>
+        <div ng-repeat="contact in user.userObject.contactList" class="contact row">
+            {{contact}}
+        </div>
+        <input type="text" ng-model="inputUserName">
+        <button type="button" name="button" ng-click="chat.addContact(inputUserName)">Add Contact</button>
+      </div>
+      <div class="col-md-8">
+        <div ng-repeat="message in chat.messages" class="contact row">
+            {{message}}
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-default" ng-click="chat.logout()">Log Out</button>
+</div>

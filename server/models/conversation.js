@@ -2,8 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var ConversationSchema = new Schema({
-  participants: Array,
-  messages: Array,
+  participants: [{ type: Schema.Types.ObjectId, ref: 'User'}],
   tags: Array
 });
 
