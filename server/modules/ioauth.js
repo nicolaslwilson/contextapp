@@ -36,10 +36,17 @@ function init(_http, _memStore) {
     fail:         onAuthorizeFail,     // *optional* callback on fail/error - read more below
   }));
 
-  io.on ('connection', function(socket) {
-      console.log("A USER LOGGED IN WITH ID: ", socket.request.user);
-      socket.on('message', function(msg) {
-        console.log('Got message from client: ' + msg);
+  io.sockets.on ('connection', function(socket) {
+      console.log("A USER LOGGED IN WITH ID: ", socket.request.user._id);
+      socket.on('conversation', function(conversation){
+        console.log('Joined conversation', conversation);
+        socket.join(conversation);
+      });
+
+
+      socket.on('message', function(message) {
+        console.log('message', message);
+        io.sockets.in(message.conversationId).emit('message', message.body);
       });
   });
 

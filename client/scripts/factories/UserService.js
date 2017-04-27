@@ -10,7 +10,7 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
       $http.get('/user').then(function(response) {
           if(response.data.username) {
               // user has a curret session on the server
-              userObject.username = response.data.username;
+              userObject.data = response.data;
               console.log('User Data: ', response.data);
           } else {
               // user has no session, bounce them back to the login page
@@ -20,9 +20,34 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
     },
 
     addContact: function (username) {
-      console.log(username);
       $http.post('/user/add', {username: username}).then(function(response){
-        console.log(response);
+        console.log('addContact response', response);
+        if (response.data.success !== true) {
+          alert("Request Failed");
+        } else {
+          userObject.data.contactList = response.data.contactList;
+        }
+
+      });
+    },
+    removeContact: function (username) {
+      $http.delete('/user/remove/' + username).then(function(response){
+        console.log('addContact response', response);
+        if (response.data.success !== true) {
+          alert("Request Failed");
+        } else {
+          userObject.data.contactList = response.data.contactList;
+        }
+      });
+    },
+    acceptContact: function (username) {
+      $http.put('/user/accept', {username: username}).then(function(response){
+        console.log('addContact response', response);
+        if (response.data.success !== true) {
+          alert("Request Failed");
+        } else {
+          userObject.data.contactList = response.data.contactList;
+        }
       });
     },
 
