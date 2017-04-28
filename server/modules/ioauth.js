@@ -45,7 +45,9 @@ function init(_http, _memStore) {
       socket.on('conversation', function(conversation){
         console.log('Joined conversation', conversation);
         socket.join(conversation);
-        Message.find({conversationId: conversation}, function (err, messages) {
+        Message.find({conversationId: conversation})
+        .populate({path: 'author', select: 'username'})
+        .exec( function (err, messages) {
           console.log('Messages in conversation', err, messages);
           io.sockets.in(conversation).emit('message-history', messages);
         });
@@ -60,8 +62,9 @@ function init(_http, _memStore) {
           author: socket.request.user._id
         });
         messageToSave.save(function (err, savedMessage) {
-          console.log(savedMessage);
-          io.sockets.in(message.conversationId).emit('message', savedMessage);
+          Message.populate(savedMessage, {path: 'author', select: 'username'}, function(err, populatedMessage) {
+            io.sockets.in(message.conversationId).emit('message', savedMessage);
+          });
         });
 
       });

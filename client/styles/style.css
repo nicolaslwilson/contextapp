@@ -39,3 +39,88 @@
 .btn-danger{
     margin-left: 10px;
 }
+
+.requests-container {
+
+}
+
+.requests-container .request {
+  border: 1px solid #24b183;
+  background-color: #7bb3a0;
+  color: white;
+  padding: 0.5em;
+}
+
+.requests-container .request .place-holder-icon {
+  background-color: white;
+  font-size: 2em;
+  padding: 0.5em;
+  margin: 0.2em;
+  border-radius: 1em;
+  color: #24b183;
+}
+
+
+.contacts-container {
+
+}
+
+.contacts-container .contact {
+  border: 1px solid #246eb1;
+  background-color: #608eb8;
+  color: white;
+  padding: 0.5em;
+}
+
+.contacts-container .contact .place-holder-icon {
+  background-color: white;
+  font-size: 2em;
+  padding: 0.5em;
+  margin: 0.2em;
+  border-radius: 1em;
+  color: #246eb1;
+}
+
+.conversations-container {
+
+}
+
+.conversations-container .conversation {
+  border: 1px solid #246eb1;
+  background-color: #608eb8;
+  color: white;
+  padding: 0.5em;
+}
+
+.conversations-container .conversation .place-holder-icon {
+  background-color: white;
+  font-size: 2em;
+  padding: 0.5em;
+  margin: 0.2em;
+  border-radius: 1em;
+  color: #246eb1;
+}
+
+.chat-box {
+
+}
+
+.chat-box .messages-container {
+  
+}
+
+.chat-box .messages-container .chat-input {
+  position: relative;
+  width: 100%;
+  vertical-align: bottom;
+}
+
+.chat-box .messages-container .chat-input input {
+  padding: 10px;
+  margin-right: .5%;
+  width: 90%;
+}
+
+.chat-box .messages-container .chat-input button {
+
+}

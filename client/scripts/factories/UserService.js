@@ -11,7 +11,7 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
           if(response.data.username) {
               // user has a curret session on the server
               userObject.data = response.data;
-              console.log('User Data: ', response.data);
+              console.log('User Data: ', response.data, userObject);
           } else {
               // user has no session, bounce them back to the login page
               $location.path("/home");
@@ -21,41 +21,41 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
     addContact: function (username) {
       $http.post('/user/add', {username: username}).then(function(response){
         console.log('addContact response', response);
-        if (response.data.success !== true) {
+        if (response.status !== 200) {
           alert("Request Failed");
         } else {
-          userObject.data.contactList = response.data.contactList;
+          userObject.data = response.data;
         }
 
       });
     },
-    removeContact: function (username) {
-      $http.delete('/user/remove/' + username).then(function(response){
+    removeContact: function (id) {
+      $http.delete('/user/remove/' + id).then(function(response){
         console.log('addContact response', response);
-        if (response.data.success !== true) {
+        if (response.status !== 200) {
           alert("Request Failed");
         } else {
-          userObject.data.contactList = response.data.contactList;
+          userObject.data = response.data;
         }
       });
     },
-    acceptContact: function (username) {
-      $http.put('/user/accept', {username: username}).then(function(response){
+    acceptContact: function (id) {
+      $http.put('/user/accept', {_id: id}).then(function(response){
         console.log('addContact response', response);
-        if (response.data.success !== true) {
+        if (response.status !== 200) {
           alert("Request Failed");
         } else {
-          userObject.data.contactList = response.data.contactList;
+          userObject.data = response.data;
         }
       });
     },
     createConversation: function (username) {
       $http.post('/user/conversation/add', {username: username}).then(function(response){
         console.log('addContact response', response);
-        if (response.data.success !== true) {
+        if (response.status !== 200) {
           alert("Request Failed");
         } else {
-          userObject.data.conversationList = response.data.conversationList;
+          userObject.data = response.data;
         }
 
       });

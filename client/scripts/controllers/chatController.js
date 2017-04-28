@@ -2,6 +2,7 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', 'UserService
   var chat = this;
   chat.socket = io();
   chat.user = UserService.userObject;
+  chat.messages = [];
   chat.addContact = UserService.addContact;
   chat.acceptContact = UserService.acceptContact;
   chat.removeContact = UserService.removeContact;
@@ -20,13 +21,13 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', 'UserService
 
   chat.socket.on('message-history', function(messages){
     console.log(messages);
-    chat.user.data.messages = [];
+    chat.messages = [];
     for (var i = 0; i < messages.length; i++) {
-      $scope.$apply(chat.user.data.messages.push(messages[i]));
+      $scope.$apply(chat.messages.push(messages[i]));
     }
   });
   chat.socket.on('message', function(message){
     console.log(message);
-    $scope.$apply(chat.user.data.messages.push(message));
+    $scope.$apply(chat.messages.push(message));
   });
 }]);
