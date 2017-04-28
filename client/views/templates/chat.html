@@ -1,12 +1,11 @@
 <div class="container" ng-click="click()">
-    <h1 id="welcome" class="lead">Welcome, {{chat.user.data}}!</h1>
+    <h1 id="welcome" class="lead">Welcome, {{chat.user.data.username}}!</h1>
     <div class="row">
       <div class="col-md-4">
         <div class="contacts-container row">
           <h3>Contacts</h3>
           <div ng-repeat="contactObject in chat.user.data.contactList" class="contact row">
               {{contactObject.contact.username}}
-              {{contactObject}}
               <div ng-if="contactObject.status == 'request'" class="confirmRequest">
                 <button type="button" name="button" ng-click="chat.acceptContact(contactObject.contact.username)">Accept</button>
                 <button type="button" name="button" ng-click="chat.removeContact(contactObject.contact.username)">Deny</button>
@@ -19,7 +18,7 @@
           <h3>Conversations</h3>
           <div ng-repeat="conversationObject in chat.user.data.conversationList" class="conversation">
               {{conversationObject}}
-              <button type="button" name="button" ng-click="chat.socket.emit('conversation', conversationObject._id)">Join</button>
+              <button type="button" name="button" ng-click="chat.joinConversation(conversationObject._id)">Join</button>
           </div>
           <input type="text" ng-model="chat.inputConversation">
           <button type="button" name="button" ng-click="chat.createConversation(chat.inputConversation)">Create Conversation</button>
@@ -27,10 +26,10 @@
       </div>
       <div class="col-md-8">
         <div ng-repeat="message in chat.user.data.messages  track by $index" class="contact row">
-            {{message}}
+          <p><em>{{message.author}}:</em> {{message.body}}</p>
         </div>
         <input type="text" name="" value="" ng-model="chat.inputMessage">
-        <button type="button" name="button" ng-click="chat.socket.emit('message', {body: chat.inputMessage, conversationId: 'general'})">Send Message</button>
+        <button type="button" name="button" ng-click="chat.socket.emit('message', {body: chat.inputMessage, conversationId: chat.currentConversation})">Send Message</button>
       </div>
     </div>
     <button class="btn btn-default" ng-click="chat.logout()">Log Out</button>

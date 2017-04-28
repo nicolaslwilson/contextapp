@@ -4,6 +4,10 @@ var io;
 var passportSocketIo = require("passport.socketio");
 var cookieParser = require('cookie-parser');
 
+var User = require('../models/user.js');
+var Conversation = require('../models/conversation.js');
+var Message = require('../models/message.js');
+
 function onAuthorizeSuccess(data, accept){
   console.log('successful connection to socket.io');
 
@@ -41,12 +45,25 @@ function init(_http, _memStore) {
       socket.on('conversation', function(conversation){
         console.log('Joined conversation', conversation);
         socket.join(conversation);
+        Message.find({conversationId: conversation}, function (err, messages) {
+          console.log('Messages in conversation', err, messages);
+          io.sockets.in(conversation).emit('message-history', messages);
+        });
       });
 
 
       socket.on('message', function(message) {
         console.log('message', message);
-        io.sockets.in(message.conversationId).emit('message', message.body);
+        var messageToSave = new Message({
+          conversationId: message.conversationId,
+          body: message.body,
+          author: socket.request.user._id
+        });
+        messageToSave.save(function (err, savedMessage) {
+          console.log(savedMessage);
+          io.sockets.in(message.conversationId).emit('message', savedMessage);
+        });
+
       });
   });
 
