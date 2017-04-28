@@ -7,10 +7,17 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', 'UserService
   chat.acceptContact = UserService.acceptContact;
   chat.removeContact = UserService.removeContact;
   chat.createConversation = UserService.createConversation;
+
   chat.joinConversation = function (conversationId) {
     console.log(conversationId);
     chat.currentConversation = conversationId;
     chat.socket.emit('conversation', conversationId);
+  };
+
+  chat.addTag = function (messageId) {
+    $http.put('/user/message/tag', {_id: messageId}).then(function (response) {
+      console.log(response);
+    });
   };
   chat.logout = UserService.logout;
   chat.inputUserName = "test";

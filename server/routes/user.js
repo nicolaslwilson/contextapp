@@ -72,6 +72,29 @@ router.put('/accept', isLoggedIn, function (req, res) {
   );
 });
 
+router.put('/message/tag', isLoggedIn, function (req, res) {
+  var tag = req.body;
+  Message.findOneAndUpdate(
+    //Find current user
+    {_id: tag._id},
+    //Add contact to contactList
+    {
+      tag: 'Tagged'
+    },
+    {
+      new: true
+    },
+    //Update contact
+    function (err, updatedMessage) {
+      if (err) {
+        console.log(err);
+        res.sendStatus(500);
+      }
+      res.send(updatedMessage);
+    }
+  );
+});
+
 router.delete('/remove/:id', isLoggedIn, function (req, res) {
   var user = req.user;
   var contactId = req.params.id;
