@@ -1,74 +1,71 @@
 <div class="container" ng-click="click()">
     <h1 id="welcome" class="lead">Welcome, {{chat.user.data.username}}!</h1>
     <div class="row">
-      <div class="col-md-3">
-        <div class="contacts-box row">
-          <h3>Contacts</h3>
-          <div class="requests-container col-md-12">
-            <div ng-repeat="requestObject in chat.user.data.requestList" class="request row">
-              <div class="col-md-3">
-                <i class="place-holder-icon glyphicon glyphicon-user pull-left"></i>
-              </div>
-              <div class="col-md-9">
-                <h5>{{requestObject.username}}</h5>
-                  <div class="confirmRequest">
-                    <button type="button" name="button" class="btn btn-success" ng-click="chat.acceptContact(requestObject._id)">Accept</button>
-                    <button type="button" name="button" class="btn btn-danger" ng-click="chat.removeContact(requestObject._id)">Deny</button>
-                  </div>
-              </div>
-            </div>
-          </div>
-          <div class="contacts-container col-md-12">
-            <div ng-repeat="contactObject in chat.user.data.contactList" class="contact row">
-              <div class="col-md-3">
-                <i class="place-holder-icon glyphicon glyphicon-user pull-left"></i>
-              </div>
-              <div class="col-md-9">
-                <h5>{{contactObject.username}}</h5>
-              </div>
-            </div>
-          </div>
-            <input type="text" class="form-control" ng-model="chat.inputUserName">
-            <button type="button" name="button" class="btn btn-primary" ng-click="chat.addContact(chat.inputUserName)">Add Contact</button>
-        </div>
-        <div class="conversations-box row">
-          <h3>Conversations</h3>
-          <div class="conversations-container col-md-12">
-            <div ng-repeat="conversationObject in chat.user.data.conversationList" class="conversation row">
-                <div class="col-md-3">
-                  <i class="place-holder-icon glyphicon glyphicon-comment"></i>
+        <div class="col-md-3">
+            <div class="contacts-box row">
+                <h3>Contacts</h3>
+                <div class="requests-container col-md-12">
+                    <div ng-repeat="requestObject in chat.user.data.requestList" class="request row">
+                        <div class="col-md-3">
+                            <i class="place-holder-icon glyphicon glyphicon-user pull-left"></i>
+                        </div>
+                        <div class="col-md-9">
+                            <h5>{{requestObject.username}}</h5>
+                            <div class="confirmRequest">
+                                <button type="button" name="button" class="btn btn-success" ng-click="chat.acceptContact(requestObject._id)">Accept</button>
+                                <button type="button" name="button" class="btn btn-danger" ng-click="chat.removeContact(requestObject._id)">Deny</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-9">
-                  <p>
-                    <span ng-if="participant.username !== chat.user.data.username" ng-repeat="participant in conversationObject.participants">{{participant.username}} </span>
-                  </p>
-                  <button type="button" name="button" class="btn btn-primary"ng-click="chat.joinConversation(conversationObject._id)">Join</button>
+                <div class="contacts-container col-md-12">
+                    <div ng-repeat="contactObject in chat.user.data.contactList" class="contact row">
+                        <div class="col-md-3">
+                            <i class="place-holder-icon glyphicon glyphicon-user pull-left"></i>
+                        </div>
+                        <div class="col-md-9">
+                            <h5>{{contactObject.username}}</h5>
+                        </div>
+                    </div>
                 </div>
-
+                <input type="text" class="form-control" ng-model="chat.inputUserName">
+                <button type="button" name="button" class="btn btn-primary" ng-click="chat.addContact(chat.inputUserName)">Add Contact</button>
             </div>
-          </div>
-          <input type="text" class="form-control" ng-model="chat.inputConversation">
-          <button type="button" name="button" class="btn btn-primary" ng-click="chat.createConversation(chat.inputConversation)">Create Conversation</button>
-        </div>
-      </div>
-      <div class="col-md-9">
-        <div class="chat-box row">
-          <div class="messages-container col-md-9">
-            <div ng-repeat="message in chat.messages  track by $index" class="contact row">
-              <p><strong>{{message.author.username}}:</strong> {{message.body}}</p> <i class="glyphicon glyphicon-tags"></i>
+            <div class="conversations-box row">
+                <h3>Conversations</h3>
+                <div class="conversations-container col-md-12">
+                    <div ng-repeat="conversationObject in chat.user.data.conversationList" class="conversation row">
+                        <div class="col-md-3">
+                            <i class="place-holder-icon glyphicon glyphicon-comment"></i>
+                        </div>
+                        <div class="col-md-9">
+                            <p>
+                                <span ng-if="participant.username !== chat.user.data.username" ng-repeat="participant in conversationObject.participants">{{participant.username}} </span>
+                            </p>
+                            <button type="button" name="button" class="btn btn-primary" ng-click="chat.joinConversation(conversationObject._id)">Join</button>
+                        </div>
+
+                    </div>
+                </div>
+                <input type="text" class="form-control" ng-model="chat.inputConversation">
+                <button type="button" name="button" class="btn btn-primary" ng-click="chat.createConversation(chat.inputConversation)">Create Conversation</button>
             </div>
-            <div class="chat-input row">
-              <input type="text" class="form-control" ng-model="chat.inputMessage">
-              <button type="button" name="button" class="btn btn-primary" ng-click="chat.socket.emit('message', {body: chat.inputMessage, conversationId: chat.currentConversation})">Send Message</button>
+        </div>
+        <div class="col-md-9">
+            <div class="chat-box row">
+                <div class="messages-container col-md-9">
+                    <div ng-repeat="message in chat.messages  track by $index" class="contact row">
+                        <p><i ng-click="chat.addTag(message._id)" class="glyphicon glyphicon-tags"></i><strong>{{message.author.username}}:</strong> {{message.body}}</p>
+                    </div>
+                    <div class="chat-input row">
+                        <input type="text" class="form-control" ng-model="chat.inputMessage">
+                        <button type="button" name="button" class="btn btn-primary" ng-click="chat.socket.emit('message', {body: chat.inputMessage, conversationId: chat.currentConversation})">Send Message</button>
+                    </div>
+                </div>
+                <div class="chat-info-container col-md-3">
+                </div>
             </div>
-
-          </div>
-          <div class="chat-info-container col-md-3">
-
-          </div>
         </div>
-        </div>
-
     </div>
     <button class="btn btn-default" ng-click="chat.logout()">Log Out</button>
 </div>
