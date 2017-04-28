@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 var MessageSchema = new Schema({
   conversationId: {
     type: Schema.Types.ObjectId,
+    ref: 'Conversation',
     required: true
   },
   body: {

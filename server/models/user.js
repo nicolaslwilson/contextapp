@@ -3,13 +3,34 @@ var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
 
+//ContactSchema, a subdocument of UserSchema
+var ContactSchema = new Schema({
+  contact:  {
+              type: Schema.Types.ObjectId,
+              ref: 'User',
+              required: true,
+            },
+  status:   {
+              type: String,
+              required: true,
+              default: 'pending'
+            }
+  },
+  {_id: false }
+);
+
 // Mongoose Schema
 var UserSchema = new Schema({
-    username: {type: String, required: true, index: {unique: true}},
-    password: {type: String, required: true},
-    contactList: [String],
-    contactRequests: Array,
-    conversations: Array
+  username: {
+              type: String,
+              required: true,
+              index: {unique: true}
+            },
+  password: {
+              type: String,
+              required: true
+            },
+  contactList: [ContactSchema]
 });
 
 // Called before adding a new user to the DB. Encrypts password.
