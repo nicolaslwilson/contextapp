@@ -5,6 +5,7 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', 'UserService
   chat.addContact = UserService.addContact;
   chat.acceptContact = UserService.acceptContact;
   chat.removeContact = UserService.removeContact;
+  chat.createConversation = UserService.createConversation;
   chat.logout = UserService.logout;
   chat.inputUserName = "test";
 

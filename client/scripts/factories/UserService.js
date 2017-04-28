@@ -18,7 +18,6 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
           }
       });
     },
-
     addContact: function (username) {
       $http.post('/user/add', {username: username}).then(function(response){
         console.log('addContact response', response);
@@ -50,7 +49,17 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
         }
       });
     },
+    createConversation: function (username) {
+      $http.post('/user/conversation/add', {username: username}).then(function(response){
+        console.log('addContact response', response);
+        if (response.data.success !== true) {
+          alert("Request Failed");
+        } else {
+          userObject.data.conversationList = response.data.conversationList;
+        }
 
+      });
+    },
     logout : function() {
         $http.get('/user/logout').then(function(response) {
           console.log('logged out');

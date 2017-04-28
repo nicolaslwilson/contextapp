@@ -44,10 +44,15 @@ router.get('/', isLoggedIn, function(req, res) {
       if (err) {
         console.log(err);
       } else {
-        res.send({
-          username: user.username,
-          contactList: user.contactList,
+        Conversation.find({participants: req.user._id}, function (err, conversations) {
+          res.send({
+            username: user.username,
+            contactList: user.contactList,
+            conversationList: conversations,
+            messages: []
+          });
         });
+
       }
     }
   );
@@ -109,7 +114,32 @@ router.delete('/remove/:username', isLoggedIn, function (req, res) {
   });
 });
 
-
+router.post('/conversation/add', isLoggedIn, function(req, res) {
+  var contactUsername = req.body.username;
+  User.findOne({username: req.body.username}, function (err, contact) {
+    if (err) {
+      console.log(err);
+    }
+    if (contact) {
+      var conversation = new Conversation({
+        participants: [req.user._id]
+      });
+      conversation.participants.push(contact._id);
+      conversation.save(function (err, conversation) {
+        if (err) {
+          console.log(err);
+          res.sendStatus(404);
+        }
+        Conversation.find({participants: req.user._id}, function (err, conversations) {
+          res.send({success: true, conversationList: conversations});
+        });
+      });
+    }
+    else {
+      res.send({success: false, message: 'Failed to Add User to Conversation'});
+    }
+  });
+});
 
 // clear all server session information about this user
 router.get('/logout', function(req, res) {
