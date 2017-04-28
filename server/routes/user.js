@@ -8,135 +8,109 @@ var Conversation = require('../models/conversation.js');
 var Message = require('../models/message.js');
 
 router.post('/add', isLoggedIn, function (req, res) {
-  var contact;
-  //Verify contact request is for an extant user and not already in contactList.
-  User.findOne({username: req.body.username, 'contactList.contact': {$ne: req.user._id}}, function (err, user) {
-    if (err) {
-      console.log(err);
-    } else {
-      if (user) {
-        contact = user;
-        //Push request to contact's contactList
-        User.findOneAndUpdate({_id: contact._id}, { $addToSet: {contactList: {contact: req.user._id, status: 'request'}}}, {new: true}, function (err, contact) {
-          if (err) {
-            console.log(err);
-          }
-          else {
-            //Push pending contact to user's contactList
-            User.findOneAndUpdate({_id: req.user._id},{ $addToSet: {contactList: {contact: contact._id}}}, {new: true})
-            .populate({path: 'contactList.contact', select: 'username'})
-            .exec(function (err, user) {
-              res.send({success: true, contactList: user.contactList});
-            });
-          }
-        });
-      } else {
-        res.send({success: false});
+  console.log('add', req.body);
+  var contact = req.body;
+  var initiator = req.user;
+  //Verify contact is not self
+  if (contact.username == initiator.username) {
+    console.log('Can\'t add self as contact');
+    res.sendStatus(500);
+  }
+  //Push request to user
+  User.findOneAndUpdate(
+    //Find user with username, verify user not already a contact and no request already pending
+    {username: contact.username, contactList: {$ne: initiator._id}, requestList: {$ne: initiator._id}},
+    {$addToSet: {requestList: initiator._id}},
+    function (err, contactFromQuery) {
+      if (err) {
+        console.log(err);
+        res.sendStatus(500);
+      } else if (contactFromQuery) {
+        assembleUserDataAndSendResponse(initiator._id, res);
       }
-    }
-  });
+      else {
+        res.sendStatus(500);
+      }
+    });
 });
 
 // Handles Ajax request for user information if user is authenticated
 router.get('/', isLoggedIn, function(req, res) {
-  User.findOne({_id: req.user._id}).populate({path: 'contactList.contact', select: 'username'}).exec(
-    function (err, user) {
+  var user = req.user;
+  assembleUserDataAndSendResponse(user._id, res);
+});
+
+router.put('/accept', isLoggedIn, function (req, res) {
+  console.log('PUT /accept', req.body, req.user);
+  var user = req.user;
+  var contact = req.body;
+  User.findOneAndUpdate(
+    //Find current user
+    {_id: user._id},
+    //Add contact to contactList
+    {
+      $pull: {requestList: contact._id},
+      $addToSet: {contactList: contact._id}
+    },
+    //Update contact
+    function (err, updatedUser) {
       if (err) {
         console.log(err);
-      } else {
-        Conversation.find({participants: req.user._id}, function (err, conversations) {
-          res.send({
-            username: user.username,
-            contactList: user.contactList,
-            conversationList: conversations,
-            messages: []
-          });
-        });
-
+        res.sendStatus(500);
       }
+      User.findOneAndUpdate(
+        {_id: contact._id},
+        //Add contact to contactList
+        {$addToSet: {contactList: user._id}},
+        //Update contact
+        function (err, updatedContact) {
+          console.log("*******Updated*******\nUser-----\n", user, "\nContact-----\n", contact);
+          assembleUserDataAndSendResponse(user._id, res);
+        }
+      );
     }
   );
 });
 
-router.put('/accept', isLoggedIn, function (req, res) {
-  var contactUsername = req.body.username;
-  User.findOne({username: contactUsername}, function(err, contact){
-    var contactIndex = findContactInList(req.user._id, contact.contactList);
-    if (contactIndex > -1) {
-      contact.contactList[contactIndex].status = 'Confirmed';
-      contact.save();
-    }
-    User.findOne({_id: req.user._id}, function(err, user){
-      var userIndex = findContactInList(contact._id, user.contactList);
-      if (userIndex > -1) {
-        user.contactList[contactIndex].status = 'Confirmed';
-        user.save(function (err, savedUser) {
-          if (err) {
-            console.log(err);
-          } else {
-              User.findOne({_id: req.user._id})
-              .populate({path: 'contactList.contact', select: 'username'})
-              .exec(function (err, user) {
-                res.send({success: true, contactList: user.contactList});
-              });
-          }
-        });
-      }
-    });
-  });
-});
-
-router.delete('/remove/:username', isLoggedIn, function (req, res) {
-  var contactUsername = req.params.username;
-  User.findOne({username: contactUsername}, function(err, contact){
-    var contactIndex = findContactInList(req.user._id, contact.contactList);
-    if (contactIndex > -1) {
-      contact.contactList.splice(contactIndex, 1);
-      contact.save();
-    }
-    User.findOne({_id: req.user._id}, function(err, user){
-      var userIndex = findContactInList(contact._id, user.contactList);
-      if (userIndex > -1) {
-        user.contactList.splice(userIndex, 1);
-        user.save(function (err, savedUser) {
-          if (err) {
-            console.log(err);
-          } else {
-              User.findOne({_id: req.user._id})
-              .populate({path: 'contactList.contact', select: 'username'})
-              .exec(function (err, user) {
-                res.send({success: true, contactList: user.contactList});
-              });
-          }
-        });
-      }
-    });
+router.delete('/remove/:id', isLoggedIn, function (req, res) {
+  var user = req.user;
+  var contactId = req.params.id;
+  User.findOneAndUpdate(
+    {_id: user._id},
+    {$pull: {requestList: contactId}},
+    function(err, contact){
+      assembleUserDataAndSendResponse(user._id, res);
   });
 });
 
 router.post('/conversation/add', isLoggedIn, function(req, res) {
-  var contactUsername = req.body.username;
-  User.findOne({username: req.body.username}, function (err, contact) {
+  var user = req.user;
+  var contact = req.body;
+  //Make sure input contact is an extant user
+  User.findOne({username: contact.username}, function (err, contact) {
     if (err) {
       console.log(err);
+      res.sendStatus(500);
     }
+    //If user exists, start a new conversation with that user
     if (contact) {
       var conversation = new Conversation({
-        participants: [req.user._id]
+        participants: [user._id, contact._id]
       });
-      conversation.participants.push(contact._id);
+      //Save conversation and send updated user data to client
       conversation.save(function (err, conversation) {
         if (err) {
           console.log(err);
-          res.sendStatus(404);
+          res.sendStatus(500);
         }
-        Conversation.find({participants: req.user._id}, function (err, conversations) {
-          res.send({success: true, conversationList: conversations});
+        Conversation.find({participants: user._id}, function (err, conversations) {
+          assembleUserDataAndSendResponse(user._id, res);
         });
       });
     }
     else {
-      res.send({success: false, message: 'Failed to Add User to Conversation'});
+      console.log('No contact');
+      res.sendStatus(500);
     }
   });
 });
@@ -149,19 +123,6 @@ router.get('/logout', function(req, res) {
   res.sendStatus(200);
 });
 
-function findContactInList (id, contactList) {
-  var index = -1;
-  var contactID;
-  for (var i = 0; i < contactList.length; i++) {
-    contactID = contactList[i].contact;
-    if (contactID.equals(id)) {
-      index = i;
-      return index;
-    }
-  }
- return index;
-}
-
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
     // if user is authenticated in the session, carry on
@@ -170,6 +131,31 @@ function isLoggedIn(req, res, next) {
     }
     // if they aren't redirect them to the home page
     return res.redirect('/');
+}
+
+function assembleUserDataAndSendResponse(uid, res) {
+  var userObject = {};
+  User.findOne({_id: uid})
+  .populate({path: 'requestList contactList', select: 'username'})
+  .exec(function (err, user) {
+    if (err) {
+      res.sendStatus(500);
+    }
+    Conversation.find({participants: uid})
+    .populate({path: 'participants', select: 'username'})
+    .exec(function (err, conversations) {
+      if (err) {
+        res.sendStatus(500);
+      }
+      userObject._id = user._id;
+      userObject.username = user.username;
+      userObject.requestList = user.requestList;
+      userObject.contactList = user.contactList;
+      userObject.conversationList = conversations;
+      console.log(userObject);
+      res.send(userObject);
+    });
+  });
 }
 
 module.exports = router;
