@@ -90,13 +90,10 @@ router.put('/message/tag', isLoggedIn, function (req, res) {
         console.log(err);
         res.sendStatus(500);
       }
-      Conversation.findOneAndUpdate(
-        {_id: updatedMessage.conversationId},
-        {$addToSet: {tags: updatedMessage.tag}},
-        function (err, updatedConversation) {
-          res.send({updatedMessage, updatedConversation});
-        }
-      );
+      Message.distinct('tag', {conversationId: updatedMessage.conversationId}, function (err, tags) {
+        console.log(tags);
+        res.send(tags)
+      });
     }
   );
 });

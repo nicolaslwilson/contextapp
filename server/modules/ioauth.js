@@ -48,9 +48,9 @@ function init(_http, _memStore) {
         Message.find({conversationId: conversation})
         .populate({path: 'author', select: 'username'})
         .exec( function (err, messages) {
-          Conversation.findOne({_id: conversation}, function (err, conversationData) {
-            console.log({conversationData, messages});
-            io.sockets.in(conversation).emit('conversationData', {conversationData, messages});
+          Message.distinct('tag', {conversationId: conversation}, function (err, tags) {
+            console.log({tags, messages});
+            io.sockets.in(conversation).emit('conversationData', {tags, messages});
           });
         });
       });

@@ -24,7 +24,8 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', 'UserService
 
   chat.addTag = function (messageId, tag) {
     $http.put('/user/message/tag', {_id: messageId, tag: tag}).then(function (response) {
-      $scope.$apply(chat.conversationTags = response.updatedConversation.tags);
+      console.log(response);
+      chat.conversationTags = response.data;
     });
   };
 
@@ -39,7 +40,7 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', 'UserService
     for (var i = 0; i < conversationData.messages.length; i++) {
       $scope.$apply(chat.messages.push(conversationData.messages[i]));
     }
-      $scope.$apply(chat.conversationTags = conversationData.conversationData.tags);
+      $scope.$apply(chat.conversationTags = conversationData.tags);
   });
   chat.socket.on('message', function(message){
     console.log(message);
