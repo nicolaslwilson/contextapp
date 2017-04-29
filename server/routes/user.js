@@ -72,6 +72,32 @@ router.put('/accept', isLoggedIn, function (req, res) {
   );
 });
 
+router.put('/message/tag', isLoggedIn, function (req, res) {
+  var tag = req.body;
+  Message.findOneAndUpdate(
+    //Find current user
+    {_id: tag._id},
+    //Add contact to contactList
+    {
+      tag: tag.tag
+    },
+    {
+      new: true
+    },
+    //Update contact
+    function (err, updatedMessage) {
+      if (err) {
+        console.log(err);
+        res.sendStatus(500);
+      }
+      Message.distinct('tag', {conversationId: updatedMessage.conversationId}, function (err, tags) {
+        console.log(tags);
+        res.send(tags)
+      });
+    }
+  );
+});
+
 router.delete('/remove/:id', isLoggedIn, function (req, res) {
   var user = req.user;
   var contactId = req.params.id;
@@ -80,6 +106,17 @@ router.delete('/remove/:id', isLoggedIn, function (req, res) {
     {$pull: {requestList: contactId}},
     function(err, contact){
       assembleUserDataAndSendResponse(user._id, res);
+  });
+});
+
+router.get('/conversation/:conversationId/:tag', isLoggedIn, function (req, res) {
+  Message.find({conversationId: req.params.conversationId, tag: req.params.tag})
+  .populate({path: 'author', select: 'username'})
+  .exec( function (err, messages) {
+    if (err) {
+      res.sendStatus(500);
+    }
+    res.send(messages);
   });
 });
 

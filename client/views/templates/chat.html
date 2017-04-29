@@ -55,7 +55,7 @@
             <div class="chat-box row">
                 <div class="messages-container col-md-9">
                     <div ng-repeat="message in chat.messages  track by $index" class="contact row">
-                        <p><i ng-click="chat.addTag(message._id)" class="glyphicon glyphicon-tags"></i><strong>{{message.author.username}}:</strong> {{message.body}}</p>
+                        <p><i ng-click="chat.inputTag(message._id)" class="glyphicon glyphicon-tags"></i><strong>{{message.author.username}}:</strong> {{message.body}}</p>
                     </div>
                     <div class="chat-input row">
                         <input type="text" class="form-control" ng-model="chat.inputMessage">
@@ -63,6 +63,9 @@
                     </div>
                 </div>
                 <div class="chat-info-container col-md-3">
+                  <div ng-click="chat.filterConversation(tag)" class="cloud-tag" ng-repeat="tag in chat.conversationTags">
+                    <p>{{tag}}</p>
+                  </div>
                 </div>
             </div>
         </div>
