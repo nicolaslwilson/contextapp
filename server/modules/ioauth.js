@@ -48,8 +48,10 @@ function init(_http, _memStore) {
         Message.find({conversationId: conversation})
         .populate({path: 'author', select: 'username'})
         .exec( function (err, messages) {
-          console.log('Messages in conversation', err, messages);
-          io.sockets.in(conversation).emit('message-history', messages);
+          Conversation.findOne({_id: conversation}, function (err, conversationData) {
+            console.log({conversationData, messages});
+            io.sockets.in(conversation).emit('conversationData', {conversationData, messages});
+          });
         });
       });
 

@@ -79,7 +79,7 @@ router.put('/message/tag', isLoggedIn, function (req, res) {
     {_id: tag._id},
     //Add contact to contactList
     {
-      tag: 'Tagged'
+      tag: tag.tag
     },
     {
       new: true
@@ -90,7 +90,13 @@ router.put('/message/tag', isLoggedIn, function (req, res) {
         console.log(err);
         res.sendStatus(500);
       }
-      res.send(updatedMessage);
+      Conversation.findOneAndUpdate(
+        {_id: updatedMessage.conversationId},
+        {$addToSet: {tags: updatedMessage.tag}},
+        function (err, updatedConversation) {
+          res.send({updatedMessage, updatedConversation});
+        }
+      );
     }
   );
 });
