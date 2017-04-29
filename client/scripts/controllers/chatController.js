@@ -14,6 +14,7 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', 'UserService
   chat.joinConversation = function (conversationId) {
     console.log('joining', conversationId);
     chat.currentConversation = conversationId;
+    chat.messages = [];
     chat.socket.emit('conversation', conversationId);
   };
 
@@ -29,6 +30,11 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', 'UserService
     });
   };
 
+  chat.filterConversation = function (tag) {
+    $http.get('/user/conversation/' + chat.currentConversation + '/'+ tag).then(function (response) {
+      chat.messages = response.data;
+    });
+  };
 
 
   chat.socket.on('connect', function () {

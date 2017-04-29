@@ -109,6 +109,17 @@ router.delete('/remove/:id', isLoggedIn, function (req, res) {
   });
 });
 
+router.get('/conversation/:conversationId/:tag', isLoggedIn, function (req, res) {
+  Message.find({conversationId: req.params.conversationId, tag: req.params.tag})
+  .populate({path: 'author', select: 'username'})
+  .exec( function (err, messages) {
+    if (err) {
+      res.sendStatus(500);
+    }
+    res.send(messages);
+  });
+});
+
 router.post('/conversation/add', isLoggedIn, function(req, res) {
   var user = req.user;
   var contact = req.body;

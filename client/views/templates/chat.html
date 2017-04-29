@@ -63,7 +63,9 @@
                     </div>
                 </div>
                 <div class="chat-info-container col-md-3">
-                  {{chat.conversationTags}}
+                  <div ng-click="chat.filterConversation(tag)" class="cloud-tag" ng-repeat="tag in chat.conversationTags">
+                    <p>{{tag}}</p>
+                  </div>
                 </div>
             </div>
         </div>
