@@ -1,64 +1,70 @@
-    <div class="container" layout="row" flex>
-      <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-4dp" md-component-id="contactsPane">
+<div class="container" layout="row" flex>
+    <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-4dp" md-component-id="contactsPane">
         <div class="contacts-box">
-          <h3>Contacts</h3>
-          <md-list class="requests-container" ng-click="chat.toggleContacts()">
-            <md-list-item ng-repeat="requestObject in chat.user.data.requestList" class="request">
-                <md-button>
-                  <i class="material-icons">account_circle</i>
-                  <h5>{{requestObject.username}}</h5>
-                  <div class="confirmRequest">
-                      <button type="button" name="button" class="btn btn-success" ng-click="chat.acceptContact(requestObject._id)">Accept</button>
-                      <button type="button" name="button" class="btn btn-danger" ng-click="chat.removeContact(requestObject._id)">Deny</button>
-                  </div>
-                </md-button>
+            <h3>Contacts</h3>
+            <md-list class="requests-container" ng-click="chat.toggleContacts()">
+                <md-list-item ng-repeat="requestObject in chat.user.data.requestList" class="request">
+                    <md-button class="md-raised">
+                        <i class="material-icons">account_circle</i>
+                        <h5>{{requestObject.username}}</h5>
+                        <div class="confirmRequest">
+                            <button type="button" name="button" class="btn btn-success" ng-click="chat.acceptContact(requestObject._id)">Accept</button>
+                            <button type="button" name="button" class="btn btn-danger" ng-click="chat.removeContact(requestObject._id)">Deny</button>
+                        </div>
+                    </md-button>
 
 
-            </md-list-item>
-          </md-list>
-          <md-list class="contacts-container" ng-click="chat.toggleContacts()">
-              <md-list-item ng-repeat="contactObject in chat.user.data.contactList" class="contact" >
-                <md-button>
-                  <i class="material-icons">account_circle</i>
-                  <h5>{{contactObject.username}}</h5>
-                </md-button>
-              </md-list-item>
-          </md-list>
-          <input type="text" class="form-control" ng-model="chat.inputUserName">
-          <button type="button" name="button" class="btn btn-primary" ng-click="chat.addContact(chat.inputUserName)">Add Contact</button>
+                </md-list-item>
+            </md-list>
+            <md-list class="contacts-container" ng-click="chat.toggleContacts()">
+                <md-list-item ng-repeat="contactObject in chat.user.data.contactList" class="contact">
+                    <md-button class="md-raised">
+                        <i class="material-icons">account_circle</i>
+                        <h5>{{contactObject.username}}</h5>
+                    </md-button>
+                </md-list-item>
+            </md-list>
+            <input type="text" class="form-control" ng-model="chat.inputUserName">
+            <button type="button" name="button" class="btn btn-primary" ng-click="chat.addContact(chat.inputUserName)">Add Contact</button>
         </div>
         <div class="conversations-box">
             <h3>Conversations</h3>
             <md-list class="conversations-container" ng-click="chat.toggleContacts()">
-                <md-list-item ng-repeat="conversationObject in chat.user.data.conversationList" class="conversation" >
-                  <md-button ng-click="chat.joinConversation(conversationObject._id)">
-                    <i class="material-icons">chat</i>
-                    <p>
-                        <span ng-if="participant.username !== chat.user.data.username" ng-repeat="participant in conversationObject.participants">{{participant.username}} </span>
-                    </p>
-                  </md-button>
+                <md-list-item ng-repeat="conversationObject in chat.user.data.conversationList" class="conversation">
+                    <md-button class="md-raised" ng-click="chat.joinConversation(conversationObject._id)">
+                        <i class="material-icons">chat</i>
+                        <p>
+                            <span ng-if="participant.username !== chat.user.data.username" ng-repeat="participant in conversationObject.participants">{{participant.username}} </span>
+                        </p>
+                    </md-button>
                 </md-list-item>
             </md-list>
             <input type="text" class="form-control" ng-model="chat.inputConversation">
             <button type="button" name="button" class="btn btn-primary" ng-click="chat.createConversation(chat.inputConversation)">Create Conversation</button>
         </div>
-      </md-sidenav>
-      <md-content flex>
-        <div class="chat-box">
-            <div class="messages-container">
-                <div ng-repeat="message in chat.messages  track by $index" class="contact">
-                    <p><i ng-click="chat.inputTag(message._id)" class="glyphicon glyphicon-tags"></i><strong>{{message.author.username}}:</strong> {{message.body}}</p>
-                </div>
-                <div class="chat-input">
-                    <input type="text" class="form-control" ng-model="chat.inputMessage">
-                    <button type="button" name="button" class="btn btn-primary" ng-click="chat.socket.emit('message', {body: chat.inputMessage, conversationId: chat.currentConversation})">Send Message</button>
+    </md-sidenav>
+    <div layout="row" flex>
+            <div class="messages-container" layout="column" flex>
+                <md-content class="messages" flex="grow">
+                    <div ng-repeat="message in chat.messages  track by $index" class="contact">
+                        <p><i ng-click="chat.inputTag(message._id)" class="glyphicon glyphicon-tags"></i><strong>{{message.author.username}}:</strong> {{message.body}}</p>
+                    </div>
+                </md-content>
+                <form class="chat-input" flex="auto" layout="row">
+                  <md-input-container flex="grow">
+                    <label for="inputMessage"></label>
+                    <input type="text" class="form-control" name="inputMessage" ng-model="chat.inputMessage">
+                  </md-input-container>
+                  <md-input-container flex="auto">
+                    <md-button md-no-ink="true" type="button" name="button" class="md-fab md-mini" ng-click="chat.socket.emit('message', {body: chat.inputMessage, conversationId: chat.currentConversation})"><i class="material-icons">send</i></md-button>
+                  </md-input-container>
+
+                </form>
+            </div>
+            <div class="chat-info-container md-whiteframe-2dp" flex="30">
+                <div ng-click="chat.filterConversation(tag)" class="cloud-tag" ng-repeat="tag in chat.conversationTags">
+                    <p>{{tag}}</p>
                 </div>
             </div>
-            <div class="chat-info-container">
-              <div ng-click="chat.filterConversation(tag)" class="cloud-tag" ng-repeat="tag in chat.conversationTags">
-                <p>{{tag}}</p>
-              </div>
-            </div>
-          </div>
-      </md-content>
     </div>
+</div>
