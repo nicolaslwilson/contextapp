@@ -1,4 +1,4 @@
-myApp.controller('ChatController', ['$scope', '$http', '$location', 'UserService', function($scope, $http, $location, UserService, ChatService) {
+myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav', 'UserService', 'ChatService', function($scope, $http, $location, $mdSidenav, UserService, ChatService) {
   var chat = this;
   chat.socket = io();
   chat.user = UserService.userObject;
@@ -34,6 +34,10 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', 'UserService
     $http.get('/user/conversation/' + chat.currentConversation + '/'+ tag).then(function (response) {
       chat.messages = response.data;
     });
+  };
+
+  chat.toggleContacts = function () {
+    $mdSidenav('contactsPane').toggle();
   };
 
 

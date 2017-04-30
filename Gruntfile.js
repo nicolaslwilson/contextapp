@@ -50,6 +50,24 @@ module.exports = function(grunt){
               'angular-route.min.js.map'],
         dest: 'server/public/vendors/angular-route/'
       },
+      angularMaterial: {
+        expand: true,
+        cwd: 'node_modules/angular-material/',
+        src: ['**.*'],
+        dest: 'server/public/vendors/angular-material/'
+      },
+      angularAnimate: {
+        expand: true,
+        cwd: 'node_modules/angular-animate/',
+        src: ['**.*'],
+        dest: 'server/public/vendors/angular-animate/'
+      },
+      angularAria: {
+        expand: true,
+        cwd: 'node_modules/angular-aria/',
+        src: ['**.*'],
+        dest: 'server/public/vendors/angular-aria/'
+      },
       socketio: {
         expand: true,
         cwd: 'node_modules/socket.io-client/dist',
