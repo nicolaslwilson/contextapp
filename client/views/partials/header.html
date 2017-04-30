@@ -1,5 +1,5 @@
-<div class="instructions">
-    <div class="container">
-        <h1 class="lead">Context Messaging App</h1>
-    </div>
-</div>
+<md-toolbar ng-controller="ChatController as chat" layout="row">
+  <md-button ng-if="chat.user.data.username" class=""  ng-disabled="" aria-label="sidebar" md-no-ink="true" ng-click="chat.toggleContacts()" aria-label="Show Contacts Pane" hide-gt-sm><i class="material-icons">menu</i></md-button>
+  <h1>Context.us</h1>
+  <md-button  ng-if="chat.user.data.username" class=""  ng-disabled="" aria-label="sidebar" md-no-ink="true" ng-click="chat.logout()">Log out</md-button>
+</md-toolbar>
