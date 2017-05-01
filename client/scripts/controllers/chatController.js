@@ -1,8 +1,8 @@
-myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav', 'UserService', 'ChatService', function($scope, $http, $location, $mdSidenav, UserService, ChatService) {
+myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav', 'UserService', 'SocketService', function($scope, $http, $location, $mdSidenav, UserService, SocketService) {
   var chat = this;
-  chat.socket = io();
+  chat.socket = UserService.socket;
   chat.user = UserService.userObject;
-  chat.messages = [];
+  chat.messages = SocketService.messages;
   chat.conversationTags = [];
   chat.addContact = UserService.addContact;
   chat.acceptContact = UserService.acceptContact;
