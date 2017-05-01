@@ -80,7 +80,7 @@ function joinConversation(conversationId, socket) {
   .populate({path: 'author', select: 'username'})
   .exec( function (err, messages) {
     Message.distinct('tag', {conversationId: conversationId}, function (err, tags) {
-      console.log({tags, messages});
+      console.log({tags});
       io.sockets.in(conversationId).emit('conversationData', {tags, messages});
     });
   });
