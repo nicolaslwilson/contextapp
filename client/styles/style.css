@@ -101,3 +101,21 @@ md-button.menuBtn > md-icon {
   background-color: #03a9f4;
   color: white;
 }
+
+.messages .message .md-list-item-text {
+  margin: 0;
+}
+
+.message i {
+  float: left;
+}
+
+.message.me {
+  float: right;
+  clear: both;
+}
+
+.message.received {
+  float: left;
+  clear: both;
+}
