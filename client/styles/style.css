@@ -93,41 +93,11 @@ md-button.menuBtn > md-icon {
   max-width: 500px;
 }
 
-/* Utils */
-
-.content-wrapper {
-  position: relative;
+.tag {
+  min-width: 40px;
 }
 
-/* Typography support coming in 0.8.0 */
-
-md-toolbar h1 {
-  font-size: 1.250em;
-  font-weight: 400;
-}
-
-.avatar {
-  position: relative;
-  width: 128px;
-  height: 128px;
-  border: 1px solid #ddd;
-  border-radius: 50%;
-  display: inline-block;
-  overflow: hidden;
-  margin: 0px;
-  vertical-align: middle;
-  zoom: 0.70;
-  transform: translateZ(0);
-  -webkit-transform: scale(0.70);
-  -moz-transform: scale(0.70);
-}
-
-md-bottom-sheet md-icon {
-  margin-right: 20px;
-}
-
-span.name {
-  font-weight: bold;
-  font-size: 1.1em;
-  padding-left: 5px;
+.tag.active {
+  background-color: #03a9f4;
+  color: white;
 }

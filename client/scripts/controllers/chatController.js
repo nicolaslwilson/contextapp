@@ -8,6 +8,7 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
   chat.acceptContact = UserService.acceptContact;
   chat.removeContact = UserService.removeContact;
   chat.createConversation = UserService.createConversation;
+  chat.selectedFilter = -1;
   chat.inputUserName = "";
   chat.logout = UserService.logout;
 
@@ -36,6 +37,19 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
     });
   };
 
+  chat.removeFilter = function () {
+    chat.setActiveFilter(-1);
+    $http.get('/user/conversation/' + chat.currentConversation).then(function (response) {
+      chat.messages = response.data;
+    });
+
+  };
+
+  chat.setActiveFilter = function (index) {
+    chat.selectedFilter = index;
+    console.log(chat.selectedFilter);
+  };
+
   chat.toggleContacts = function () {
     $mdSidenav('contactsPane').toggle();
   };
@@ -43,10 +57,12 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
 
   chat.socket.on('connect', function () {
     console.log('Connected');
+    chat.currentConversation = UserService.userObject.data.lastConversation;
   });
 
   chat.socket.on('conversationData', function(conversationData){
     console.log('conversationData', conversationData);
+
     for (var i = 0; i < conversationData.messages.length; i++) {
       $scope.$apply(chat.messages.push(conversationData.messages[i]));
     }

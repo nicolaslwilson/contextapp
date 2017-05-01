@@ -109,6 +109,17 @@ router.delete('/remove/:id', isLoggedIn, function (req, res) {
   });
 });
 
+router.get('/conversation/:conversationId/', isLoggedIn, function (req, res) {
+  Message.find({conversationId: req.params.conversationId})
+  .populate({path: 'author', select: 'username'})
+  .exec( function (err, messages) {
+    if (err) {
+      res.sendStatus(500);
+    }
+    res.send(messages);
+  });
+});
+
 router.get('/conversation/:conversationId/:tag', isLoggedIn, function (req, res) {
   Message.find({conversationId: req.params.conversationId, tag: req.params.tag})
   .populate({path: 'author', select: 'username'})
@@ -189,6 +200,7 @@ function assembleUserDataAndSendResponse(uid, res) {
       userObject.requestList = user.requestList;
       userObject.contactList = user.contactList;
       userObject.conversationList = conversations;
+      userObject.lastConversation = user.lastConversation;
       console.log(userObject);
       res.send(userObject);
     });

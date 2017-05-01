@@ -62,14 +62,11 @@
 
                 </form>
             </div>
-            <md-sidenav md-is-locked-open='true' class="chat-info-container md-whiteframe-2dp" flex="30">
-                <md-chips readonly="true" >
-                  <md-chip-template>
-                    <md-chip ng-click="chat.filterConversation(tag)" class="cloud-tag" ng-repeat="tag in chat.conversationTags">
-                        {{tag}}
-                    </md-chip>
-                  </md-chip-template>
-                </md-chips>
+            <md-sidenav md-is-locked-open='true' class="chat-info-container md-whiteframe-2dp" flex="30" layout="column" >
+              <div class="tag-cloud" layout="row" layout-wrap ng-click="chat.removeFilter()">
+                <md-button md-no-ink="true" class="md-raised tag" ng-repeat="tag in chat.conversationTags" ng-click="chat.filterConversation(tag); chat.setActiveFilter($index); $event.stopPropagation()" ng-class="{active : $index == chat.selectedFilter}">{{tag}}</md-button>
+              </div>
+
             </md-sidenav>
     </div>
 </div>
