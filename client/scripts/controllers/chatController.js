@@ -15,7 +15,7 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
     console.log('joining', conversationId);
     chat.currentConversation = conversationId;
     chat.messages = [];
-    chat.socket.emit('conversation', conversationId);
+    chat.socket.emit('joinConversation', conversationId);
   };
 
   chat.inputTag = function (messageId) {

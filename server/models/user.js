@@ -21,7 +21,11 @@ var UserSchema = new Schema({
   requestList: [{
               type: Schema.Types.ObjectId,
               ref: 'User'
-  }]
+  }],
+  lastConversation: {
+              type: Schema.Types.ObjectId,
+              ref: 'Conversation'
+  }
 });
 
 // Called before adding a new user to the DB. Encrypts password.

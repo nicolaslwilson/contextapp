@@ -42,17 +42,16 @@ function init(_http, _memStore) {
 
   io.sockets.on ('connection', function(socket) {
       console.log("A USER LOGGED IN WITH ID: ", socket.request.user._id);
-      socket.on('conversation', function(conversation){
-        console.log('Joined conversation', conversation);
-        socket.join(conversation);
-        Message.find({conversationId: conversation})
-        .populate({path: 'author', select: 'username'})
-        .exec( function (err, messages) {
-          Message.distinct('tag', {conversationId: conversation}, function (err, tags) {
-            console.log({tags, messages});
-            io.sockets.in(conversation).emit('conversationData', {tags, messages});
+      console.log(socket.request.user);
+      joinConversation(socket.request.user.lastConversation, socket);
+      socket.on('joinConversation', function(conversation){
+        User.findOneAndUpdate(
+          {_id: socket.request.user._id},
+          {lastConversation: conversation},
+          {new: true},
+          function (err, conversationJoined) {
+            joinConversation(conversation, socket);
           });
-        });
       });
 
 
@@ -70,6 +69,20 @@ function init(_http, _memStore) {
         });
 
       });
+  });
+
+}
+
+function joinConversation(conversationId, socket) {
+  console.log('Joined conversation', conversationId);
+  socket.join(conversationId);
+  Message.find({conversationId: conversationId})
+  .populate({path: 'author', select: 'username'})
+  .exec( function (err, messages) {
+    Message.distinct('tag', {conversationId: conversationId}, function (err, tags) {
+      console.log({tags, messages});
+      io.sockets.in(conversationId).emit('conversationData', {tags, messages});
+    });
   });
 
 }
