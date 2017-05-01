@@ -12,8 +12,6 @@
                             <button type="button" name="button" class="btn btn-danger" ng-click="chat.removeContact(requestObject._id)">Deny</button>
                         </div>
                     </md-button>
-
-
                 </md-list-item>
             </md-list>
             <md-list class="contacts-container" ng-click="chat.toggleContacts()">
@@ -46,9 +44,12 @@
     <div layout="row" flex>
             <div class="messages-container" layout="column" flex>
                 <md-content class="messages" flex="grow">
-                    <div ng-repeat="message in chat.messages  track by $index" class="contact">
+                  <md-list>
+                    <md-list-item ng-repeat="message in chat.messages  track by $index" class="contact">
                         <p><i ng-click="chat.inputTag(message._id)" class="glyphicon glyphicon-tags"></i><strong>{{message.author.username}}:</strong> {{message.body}}</p>
-                    </div>
+                    </md-list-item>
+                  </md-list>
+
                 </md-content>
                 <form class="chat-input" flex="auto" layout="row">
                   <md-input-container flex="grow">
@@ -61,10 +62,14 @@
 
                 </form>
             </div>
-            <div class="chat-info-container md-whiteframe-2dp" flex="30">
-                <div ng-click="chat.filterConversation(tag)" class="cloud-tag" ng-repeat="tag in chat.conversationTags">
-                    <p>{{tag}}</p>
-                </div>
-            </div>
+            <md-sidenav md-is-locked-open='true' class="chat-info-container md-whiteframe-2dp" flex="30">
+                <md-chips readonly="true" >
+                  <md-chip-template>
+                    <md-chip ng-click="chat.filterConversation(tag)" class="cloud-tag" ng-repeat="tag in chat.conversationTags">
+                        {{tag}}
+                    </md-chip>
+                  </md-chip-template>
+                </md-chips>
+            </md-sidenav>
     </div>
 </div>
