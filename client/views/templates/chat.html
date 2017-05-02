@@ -46,7 +46,7 @@
                 <md-content class="messages" flex="grow">
                   <md-list>
                     <md-list-item
-                      ng-repeat="message in chat.messages | orderBy: 'createdAt'"
+                      ng-repeat="message in chat.socket.conversation.messages | orderBy: 'createdAt'"
                       class="message md-3-line"
                       ng-class="{received: message.author._id != chat.user.data._id, me: message.author._id == chat.user.data._id}"
                       layout="row";
@@ -66,14 +66,14 @@
                     <input type="text" class="form-control" name="inputMessage" ng-model="chat.inputMessage">
                   </md-input-container>
                   <md-input-container flex="auto">
-                    <md-button md-no-ink="true" type="button" name="button" class="md-fab md-mini" ng-click="chat.socket.emit('message', {body: chat.inputMessage, conversationId: chat.currentConversation})"><i class="material-icons">send</i></md-button>
+                    <md-button md-no-ink="true" type="button" name="button" class="md-fab md-mini" ng-click="chat.user.socket.emit('message', {body: chat.inputMessage, conversationId: chat.socket.conversation.currentConversation})"><i class="material-icons">send</i></md-button>
                   </md-input-container>
 
                 </form>
             </div>
             <md-sidenav md-is-locked-open='true' class="chat-info-container md-whiteframe-2dp" flex="30" layout="column" >
               <div class="tag-cloud" layout="row" layout-wrap ng-click="chat.removeFilter()">
-                <md-button md-no-ink="true" class="md-raised tag" ng-repeat="tag in chat.conversationTags" ng-click="chat.filterConversation(tag); chat.setActiveFilter($index); $event.stopPropagation()" ng-class="{active : $index == chat.selectedFilter}">{{tag}}</md-button>
+                <md-button md-no-ink="true" class="md-raised tag" ng-repeat="tag in chat.socket.conversation.tags" ng-click="chat.filterConversation(tag); chat.setActiveFilter($index); $event.stopPropagation()" ng-class="{active : $index == chat.selectedFilter}">{{tag}}</md-button>
               </div>
 
             </md-sidenav>
