@@ -92,7 +92,7 @@ router.put('/message/tag', isLoggedIn, function (req, res) {
       }
       Message.distinct('tag', {conversationId: updatedMessage.conversationId}, function (err, tags) {
         console.log(tags);
-        res.send(tags)
+        res.send(tags);
       });
     }
   );
@@ -133,17 +133,12 @@ router.get('/conversation/:conversationId/:tag', isLoggedIn, function (req, res)
 
 router.post('/conversation/add', isLoggedIn, function(req, res) {
   var user = req.user;
-  var contact = req.body;
+  var participants = req.body.conversationParticipantIds;
+  participants.push(user._id);
   //Make sure input contact is an extant user
-  User.findOne({username: contact.username}, function (err, contact) {
-    if (err) {
-      console.log(err);
-      res.sendStatus(500);
-    }
-    //If user exists, start a new conversation with that user
-    if (contact) {
+
       var conversation = new Conversation({
-        participants: [user._id, contact._id]
+        participants
       });
       //Save conversation and send updated user data to client
       conversation.save(function (err, conversation) {
@@ -155,12 +150,6 @@ router.post('/conversation/add', isLoggedIn, function(req, res) {
           assembleUserDataAndSendResponse(user._id, res);
         });
       });
-    }
-    else {
-      console.log('No contact');
-      res.sendStatus(500);
-    }
-  });
 });
 
 // clear all server session information about this user

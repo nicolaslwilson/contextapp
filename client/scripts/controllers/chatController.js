@@ -5,10 +5,57 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
   chat.addContact = UserService.addContact;
   chat.acceptContact = UserService.acceptContact;
   chat.removeContact = UserService.removeContact;
-  chat.createConversation = UserService.createConversation;
+
+
+  chat.createConversation = createConversation;
   chat.selectedFilter = -1;
   chat.inputUserName = "";
   chat.logout = UserService.logout;
+
+  chat.selectedUsers = [];
+  chat.transformChip = transformChip;
+  chat.selectedItem = null;
+  chat.searchText = null;
+  chat.querySearch = querySearch;
+
+  function transformChip(chip) {
+    // If it is an object, it's already a known chip
+    if (angular.isObject(chip)) {
+      return chip;
+    }
+
+    // Otherwise, create a new one
+    return { name: chip, type: 'new' };
+  }
+
+  function querySearch (query) {
+
+      var results = query ? chat.user.data.contactList.filter(createFilterFor(query)) : [];
+      console.log(chat.user.data.contactList, query, results);
+      return results;
+    }
+
+  function createFilterFor(query) {
+    var lowercaseQuery = angular.lowercase(query);
+
+    return function filterFn(contact) {
+      var lowercaseUsername =
+      angular.lowercase(contact.username);
+      console.log(lowercaseUsername);
+      return (lowercaseUsername.indexOf(lowercaseQuery) === 0);
+    };
+
+  }
+
+  function createConversation (conversationParticipants) {
+    var conversationParticipantIds = conversationParticipants.map(function (user) {
+      return user._id;
+    });
+
+    chat.selectedUsers = [];
+
+    UserService.createConversation(conversationParticipantIds);
+  }
 
   chat.joinConversation = function (conversationId) {
     console.log('joining', conversationId);

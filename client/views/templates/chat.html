@@ -37,45 +37,62 @@
                     </md-button>
                 </md-list-item>
             </md-list>
-            <input type="text" class="form-control" ng-model="chat.inputConversation">
-            <button type="button" name="button" class="btn btn-primary" ng-click="chat.createConversation(chat.inputConversation)">Create Conversation</button>
+            <md-chips
+              ng-model="chat.selectedUsers"
+              md-autocomplete-snap
+              md-transform-chip="chat.transformChip($chip)"
+              md-require-match="true"
+            >
+                <md-autocomplete
+                  md-selected-item="chat.selectedItem"
+                  md-search-text="chat.searchText"
+                  md-items="item in chat.querySearch(chat.searchText)" md-item-text="item.username"
+                  placeholder="New Conversation"
+                >
+                    <span md-highlight-text="user.searchText">
+                      {{item.username}}
+                    </span>
+                </md-autocomplete>
+                <md-chip-template>
+                    <span>
+                      <strong>{{$chip.username}}</strong>
+                    </span>
+                </md-chip-template>
+            </md-chips>
+            <md-button type="button" name="button" class="md-fab md-primary md-hue-2" ng-click="chat.createConversation(chat.selectedUsers)"><i class="material-icons">done</i></md-button>
+            <md-button type="button" name="button" class="md-fab md-primary md-hue-1" ng-click="chat.newConversation()"><i class="material-icons">add</i></md-button>
         </div>
     </md-sidenav>
     <div layout="row" flex>
-            <div class="messages-container" layout="column" flex>
-                <md-content class="messages" flex="grow">
-                  <md-list>
-                    <md-list-item
-                      ng-repeat="message in chat.socket.conversation.messages | orderBy: 'createdAt'"
-                      class="message md-3-line"
-                      ng-class="{received: message.author._id != chat.user.data._id, me: message.author._id == chat.user.data._id}"
-                      layout="row";
-                    >
-                      <i ng-click="chat.inputTag(message._id)" class="material-icons">label_outline</i>
+        <div class="messages-container" layout="column" flex>
+            <md-content class="messages" flex="grow">
+                <md-list>
+                    <md-list-item ng-repeat="message in chat.socket.conversation.messages | orderBy: 'createdAt'" class="message md-3-line" ng-class="{received: message.author._id != chat.user.data._id, me: message.author._id == chat.user.data._id}" layout="row" ;>
+                        <i ng-click="chat.inputTag(message._id)" class="material-icons">label_outline</i>
                         <div class="md-list-item-text">
-                          <h3>{{message.author.username}}</h3>
-                          <p>{{message.body}}</p>
+                            <h3>{{message.author.username}}</h3>
+                            <p>{{message.body}}</p>
                         </div>
                     </md-list-item>
-                  </md-list>
+                </md-list>
 
-                </md-content>
-                <form class="chat-input" flex="auto" layout="row">
-                  <md-input-container flex="grow">
+            </md-content>
+            <form class="chat-input" flex="auto" layout="row">
+                <md-input-container flex="grow">
                     <label for="inputMessage"></label>
                     <input type="text" class="form-control" name="inputMessage" ng-model="chat.inputMessage">
-                  </md-input-container>
-                  <md-input-container flex="auto">
-                    <md-button md-no-ink="true" type="button" name="button" class="md-fab md-mini" ng-click="chat.user.socket.emit('message', {body: chat.inputMessage, conversationId: chat.socket.conversation.currentConversation})"><i class="material-icons">send</i></md-button>
-                  </md-input-container>
+                </md-input-container>
+                <md-input-container flex="auto">
+                    <md-button md-no-ink="true" type="button" name="button" class="md-fab md-mini md-primary" ng-click="chat.user.socket.emit('message', {body: chat.inputMessage, conversationId: chat.socket.conversation.currentConversation})"><i class="material-icons">send</i></md-button>
+                </md-input-container>
 
-                </form>
-            </div>
-            <md-sidenav md-is-locked-open='true' class="chat-info-container md-whiteframe-2dp" flex="30" layout="column" >
-              <div class="tag-cloud" layout="row" layout-wrap ng-click="chat.removeFilter()">
+            </form>
+        </div>
+        <md-sidenav md-is-locked-open='true' class="chat-info-container md-whiteframe-2dp" flex="30" layout="column">
+            <div class="tag-cloud" layout="row" layout-wrap ng-click="chat.removeFilter()">
                 <md-button md-no-ink="true" class="md-raised tag" ng-repeat="tag in chat.socket.conversation.tags" ng-click="chat.filterConversation(tag); chat.setActiveFilter($index); $event.stopPropagation()" ng-class="{active : $index == chat.selectedFilter}">{{tag}}</md-button>
-              </div>
+            </div>
 
-            </md-sidenav>
+        </md-sidenav>
     </div>
 </div>

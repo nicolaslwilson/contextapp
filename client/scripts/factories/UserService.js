@@ -50,8 +50,8 @@ myApp.factory('UserService', ['$http', '$location', 'SocketService', function($h
         }
       });
     },
-    createConversation: function (username) {
-      $http.post('/user/conversation/add', {username: username}).then(function(response){
+    createConversation: function (conversationParticipantIds) {
+      $http.post('/user/conversation/add', { conversationParticipantIds}).then(function(response){
         console.log('addContact response', response);
         if (response.status !== 200) {
           alert("Request Failed");
