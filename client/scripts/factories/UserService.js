@@ -1,4 +1,4 @@
-myApp.factory('UserService', ['$http', '$location', function($http, $location){
+myApp.factory('UserService', ['$http', '$location', 'SocketService', function($http, $location, SocketService){
   console.log('User Service Loaded');
 
   var userObject = {};
@@ -11,7 +11,7 @@ myApp.factory('UserService', ['$http', '$location', function($http, $location){
           if(response.data.username) {
               // user has a curret session on the server
               userObject.data = response.data;
-              userObject.socket = io();
+              userObject.socket = SocketService.openChatSocket(response.data.lastConversation);
               console.log('User Data: ', response.data, userObject);
           } else {
               // user has no session, bounce them back to the login page

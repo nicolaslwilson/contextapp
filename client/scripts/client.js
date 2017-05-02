@@ -19,7 +19,7 @@ myApp.config(['$routeProvider', '$locationProvider',
       controller: 'ChatController',
       controllerAs: 'chat',
       resolve: {
-        getuser : ['UserService', function(UserService){
+        authenticatedUser : ['UserService', function(UserService){
           return UserService.getuser();
         }]
       }

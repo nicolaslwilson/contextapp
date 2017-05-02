@@ -1,9 +1,7 @@
 myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav', 'UserService', 'SocketService', function($scope, $http, $location, $mdSidenav, UserService, SocketService) {
   var chat = this;
-  chat.socket = UserService.socket;
   chat.user = UserService.userObject;
-  chat.messages = SocketService.messages;
-  chat.conversationTags = [];
+  chat.socket = SocketService;
   chat.addContact = UserService.addContact;
   chat.acceptContact = UserService.acceptContact;
   chat.removeContact = UserService.removeContact;
@@ -14,9 +12,11 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
 
   chat.joinConversation = function (conversationId) {
     console.log('joining', conversationId);
-    chat.currentConversation = conversationId;
-    chat.messages = [];
-    chat.socket.emit('joinConversation', conversationId);
+    chat.setActiveFilter(-1);
+    chat.socket.conversation.currentConversation = conversationId;
+    chat.socket.conversation.messages.length = 0;
+    chat.user.socket.emit('joinConversation', conversationId);
+    console.log(chat.socket);
   };
 
   chat.inputTag = function (messageId) {
@@ -27,20 +27,21 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
   chat.addTag = function (messageId, tag) {
     $http.put('/user/message/tag', {_id: messageId, tag: tag}).then(function (response) {
       console.log(response);
-      chat.conversationTags = response.data;
+      chat.socket.conversation.tags = response.data;
     });
   };
 
   chat.filterConversation = function (tag) {
-    $http.get('/user/conversation/' + chat.currentConversation + '/'+ tag).then(function (response) {
-      chat.messages = response.data;
+    console.log(chat.socket);
+    $http.get('/user/conversation/' + chat.socket.conversation.currentConversation + '/'+ tag).then(function (response) {
+      chat.socket.conversation.messages = response.data;
     });
   };
 
   chat.removeFilter = function () {
     chat.setActiveFilter(-1);
-    $http.get('/user/conversation/' + chat.currentConversation).then(function (response) {
-      chat.messages = response.data;
+    $http.get('/user/conversation/' + chat.socket.conversation.currentConversation).then(function (response) {
+      chat.socket.conversation.messages = response.data;
     });
 
   };
@@ -54,22 +55,4 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
     $mdSidenav('contactsPane').toggle();
   };
 
-
-  chat.socket.on('connect', function () {
-    console.log('Connected');
-    chat.currentConversation = UserService.userObject.data.lastConversation;
-  });
-
-  chat.socket.on('conversationData', function(conversationData){
-    console.log('conversationData', conversationData);
-
-    for (var i = 0; i < conversationData.messages.length; i++) {
-      $scope.$apply(chat.messages.push(conversationData.messages[i]));
-    }
-      $scope.$apply(chat.conversationTags = conversationData.tags);
-  });
-  chat.socket.on('message', function(message){
-    console.log(message);
-    $scope.$apply(chat.messages.push(message));
-  });
 }]);
