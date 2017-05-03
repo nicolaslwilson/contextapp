@@ -17,6 +17,7 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
   chat.selectedItem = null;
   chat.searchText = null;
   chat.querySearch = querySearch;
+  chat.createNewConversationFormOpen = false;
 
   chat.hashCode = hashCode;
   chat.intToRGB = intToRGB;
@@ -51,13 +52,19 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
   }
 
   function createConversation (conversationParticipants) {
-    var conversationParticipantIds = conversationParticipants.map(function (user) {
-      return user._id;
-    });
+    if (chat.selectedUsers.length > 0) {
+      var conversationParticipantIds = conversationParticipants.map(function (user) {
+        return user._id;
+      });
 
-    chat.selectedUsers = [];
+      chat.selectedUsers = [];
+      chat.createNewConversationFormOpen = false;
 
-    UserService.createConversation(conversationParticipantIds);
+      UserService.createConversation(conversationParticipantIds);
+    }
+    else {
+      alert("Input at least one contact to create a new conversation");
+    }
   }
 
   chat.joinConversation = function (conversationId) {

@@ -10,88 +10,6 @@ html, body {
   padding: 0px;
 }
 
-/* Toolbar area */
-
-.menu {
-  background-color: transparent;
-  border: none;
-  height: 38px;
-  margin: 16px;
-  width: 36px;
-}
-
-md-toolbar h1 {
-  margin: auto;
-}
-
-/* Sidenav area */
-
-md-list .md-button {
-  color: inherit;
-  font-weight: 500;
-  text-align: left;
-  width: 100%;
-}
-
-md-list .md-button.selected {
-  color: #03a9f4;
-}
-
-md-sidenav md-list {
-  padding: 0px 0px 8px 0px;
-}
-
-/* Primary content area */
-
-#content {
-  overflow: hidden;
-}
-
-#content {
-  padding-left: 40px;
-  padding-right: 40px;
-  padding-top: 5px;
-}
-
-#content .md-button.share {
-  background-color: transparent;
-  border: none;
-  width: 48px;
-  height: 48px;
-  margin: 8px auto 16px 0;
-  position: absolute;
-  top: 10px;
-  right: 25px;
-}
-
-#content md-icon.avatar {
-  margin-top: 10px;
-}
-
-#content .md-button.share > md-icon {
-  fill: black;
-  width: 36px;
-  height: 36px;
-}
-
-md-button.menuBtn > md-icon {
-  fill: white;
-  width: 24px;
-  height: 24px;
-}
-
-#content .md-button.share:active > md-icon {
-  background-color: #dadada;
-  border-radius: 75%;
-  padding: 4px;
-  transition: all 100ms ease-out 30ms;
-}
-
-#content img {
-  display: block;
-  height: auto;
-  max-width: 500px;
-}
 
 .tag {
   min-width: 40px;
@@ -116,4 +34,53 @@ md-button.menuBtn > md-icon {
 
 .message.received {
 
+}
+
+.message-input {
+  margin: 0;
+}
+
+.request .confirm-request {
+  float: right;
+}
+
+.request .confirm-request button{
+  padding: 0;
+  margin: 0;
+}
+
+.conversation-participants-list {
+  padding: 0 1em;
+}
+
+.conversation-participants-list p {
+  display: inline;
+  margin: 0;
+}
+
+.conversation-participant::before {
+  content: ', ';
+}
+.conversation-participant:first-child::before {
+  content: '';
+}
+
+.create-conversation-form-submit button {
+  float: right;
+}
+
+.open-conversation-form {
+  display: none;
+  float: right;
+}
+
+md-sidenav:hover .open-conversation-form {
+  display: block;
+}
+
+.open-conversation-form .material-icons {
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  font-size: 3.5em;
 }
