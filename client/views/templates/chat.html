@@ -68,11 +68,21 @@
             <md-content class="messages" flex="grow">
                 <md-list>
                     <md-list-item ng-repeat="message in chat.socket.conversation.messages | orderBy: 'createdAt'" class="message md-3-line" ng-class="{received: message.author._id != chat.user.data._id, me: message.author._id == chat.user.data._id}" layout="row" ;>
-                        <i ng-click="chat.inputTag(message._id)" class="material-icons">label_outline</i>
-                        <div class="md-list-item-text">
-                            <h3>{{message.author.username}}</h3>
-                            <p>{{message.body}}</p>
+                        <div class="message-metadata" layout="column">
+                          <i class="material-icons">account_circle</i>
+                          <i ng-style="{color: (message.tag ?  ('#' + chat.intToRGB(chat.hashCode(message.tag))) : 'black')}" ng-click="chat.inputTag(message._id)" class="material-icons">{{message.tag ? "label" : "label_outline";}}</i>
                         </div>
+                        <div class="message-body" layout="column">
+                          <div class="md-list-item-text">
+                              <div class="message-body-header">
+                                <span class="message-author-username">{{message.author.username}}</span>
+                                <span class="message-timestamp">{{message.createdAt | date: 'shortTime'}}</span>
+                              </div>
+                              <p>{{message.body}}</p>
+                          </div>
+                        </div>
+
+
                     </md-list-item>
                 </md-list>
 
@@ -90,7 +100,7 @@
         </div>
         <md-sidenav md-is-locked-open='true' class="chat-info-container md-whiteframe-2dp" flex="30" layout="column">
             <div class="tag-cloud" layout="row" layout-wrap ng-click="chat.removeFilter()">
-                <md-button md-no-ink="true" class="md-raised tag" ng-repeat="tag in chat.socket.conversation.tags" ng-click="chat.filterConversation(tag); chat.setActiveFilter($index); $event.stopPropagation()" ng-class="{active : $index == chat.selectedFilter}">{{tag}}</md-button>
+                <md-button ng-style="{color: ('#' + chat.intToRGB(chat.hashCode(tag)))}" md-no-ink="true" class="md-raised tag" ng-repeat="tag in chat.socket.conversation.tags" ng-click="chat.filterConversation(tag); chat.setActiveFilter($index); $event.stopPropagation()" ng-class="{active : $index == chat.selectedFilter}">{{tag}}</md-button>
             </div>
 
         </md-sidenav>

@@ -107,15 +107,13 @@ md-button.menuBtn > md-icon {
 }
 
 .message i {
-  float: left;
+
 }
 
 .message.me {
-  float: right;
-  clear: both;
+
 }
 
 .message.received {
-  float: left;
-  clear: both;
+
 }
