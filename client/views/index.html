@@ -1,26 +1,41 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Express / Passport</title>
-        <link rel="stylesheet" href="vendors/bootstrap/css/bootstrap.css">
-        <link rel="stylesheet" href="styles/style.css">
 
-        <script type="text/javascript" src="vendors/angular/angular.min.js"></script>
-        <script type="text/javascript" src="vendors/angular-route/angular-route.min.js"></script>
-        <!-- myApp -->
-        <script type="text/javascript" src="scripts/clientapp.js"></script>
-        <!-- Controllers -->
-        <script type="text/javascript" src="scripts/controllers/loginController.js"></script>
-        <script type="text/javascript" src="scripts/controllers/userController.js"></script>
-        <!-- Factory -->
-        <script type="text/javascript" src="scripts/factories/UserService.js"></script>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Express / Passport</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="vendors/angular-material/angular-material.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <!-- AngularJS -->
+    <script type="text/javascript" src="vendors/angular/angular.min.js"></script>
+    <script type="text/javascript" src="vendors/angular-route/angular-route.min.js"></script>
 
-    </head>
+    <!-- AngularJS material -->
+    <script src="vendors/angular-aria/angular-aria.js" charset="utf-8"></script>
+    <script src="vendors/angular-animate/angular-animate.js" charset="utf-8"></script>
+    <script src="vendors/angular-material/angular-material.js" charset="utf-8"></script>
+    <script src="/socket.io/socket.io.js"></script>
 
-    <body ng-app="myApp">
-      <header ng-include="'/views/partials/header.html'"></header>
+    <!-- myApp -->
+    <script type="text/javascript" src="scripts/client.js"></script>
+    <!-- Controllers -->
+    <script type="text/javascript" src="scripts/controllers/loginController.js"></script>
+    <script type="text/javascript" src="scripts/controllers/chatController.js"></script>
+    <!-- Factories -->
+    <script type="text/javascript" src="scripts/factories/UserService.js"></script>
+    <script type="text/javascript" src="scripts/factories/SocketService.js"></script>
 
-      <main ng-view></main>
+</head>
 
-    </body>
+<body ng-app="myApp" layout="column">
+    <header ng-include="'/views/partials/header.html'"></header>
+
+    <main layout="column" ng-view flex></main>
+
+
+</body>
+
 </html>

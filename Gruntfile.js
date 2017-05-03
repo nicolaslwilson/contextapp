@@ -31,8 +31,7 @@ module.exports = function(grunt){
       bootstrap: {
         expand: true,
         cwd: 'node_modules/bootstrap/dist/',
-        src: ['css/bootstrap.css',
-              'js/bootstrap.js'],
+        src: ['**/*.*'],
         dest: 'server/public/vendors/bootstrap/'
       },
       angular: {
@@ -50,6 +49,30 @@ module.exports = function(grunt){
               'angular-route.min.js',
               'angular-route.min.js.map'],
         dest: 'server/public/vendors/angular-route/'
+      },
+      angularMaterial: {
+        expand: true,
+        cwd: 'node_modules/angular-material/',
+        src: ['**.*'],
+        dest: 'server/public/vendors/angular-material/'
+      },
+      angularAnimate: {
+        expand: true,
+        cwd: 'node_modules/angular-animate/',
+        src: ['**.*'],
+        dest: 'server/public/vendors/angular-animate/'
+      },
+      angularAria: {
+        expand: true,
+        cwd: 'node_modules/angular-aria/',
+        src: ['**.*'],
+        dest: 'server/public/vendors/angular-aria/'
+      },
+      socketio: {
+        expand: true,
+        cwd: 'node_modules/socket.io-client/dist',
+        src: ['**.*'],
+        dest: 'server/public/vendors/socket.io/'
       }
     },
     watch: {

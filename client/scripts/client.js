@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngRoute']);
+var myApp = angular.module('myApp', ['ngRoute', 'ngMaterial']);
 
 /// Routes ///
 myApp.config(['$routeProvider', '$locationProvider',
@@ -15,10 +15,11 @@ myApp.config(['$routeProvider', '$locationProvider',
       controller: 'LoginController'
     })
     .when('/user', {
-      templateUrl: '/views/templates/user.html',
-      controller: 'UserController',
+      templateUrl: '/views/templates/chat.html',
+      controller: 'ChatController',
+      controllerAs: 'chat',
       resolve: {
-        getuser : ['UserService', function(UserService){
+        authenticatedUser : ['UserService', function(UserService){
           return UserService.getuser();
         }]
       }
