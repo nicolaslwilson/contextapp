@@ -25,6 +25,15 @@ main {
   color: white;
 }
 
+.messages-container ::-webkit-scrollbar {
+    display: none;
+}
+
+.messages-container:hover ::-webkit-scrollbar {
+    display: block;
+}
+
+
 .messages .message .md-list-item-text {
   margin: 0;
 }
