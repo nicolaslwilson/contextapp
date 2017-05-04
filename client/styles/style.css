@@ -10,6 +10,11 @@ html, body {
   padding: 0px;
 }
 
+main {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
 
 .tag {
   min-width: 40px;
@@ -22,6 +27,15 @@ html, body {
 
 .messages .message .md-list-item-text {
   margin: 0;
+}
+
+.message .message-body {
+  padding-left: 1em;
+}
+
+.message .message-timestamp {
+  font-size: .8em;
+  color: #9e9e9e;
 }
 
 .message i {
@@ -40,6 +54,19 @@ html, body {
   margin: 0;
 }
 
+.contacts-box md-list {
+  padding: 0px;
+}
+
+.request {
+
+}
+
+.request>button{
+  margin: 0;
+  border-bottom: 1px solid #40bf73;
+}
+
 .request .confirm-request {
   float: right;
 }
@@ -47,6 +74,12 @@ html, body {
 .request .confirm-request button{
   padding: 0;
   margin: 0;
+}
+
+.contact>button{
+  margin: 0;
+  border-bottom: 1px solid #03a9f4;
+  border-radius: 0;
 }
 
 .conversation-participants-list {
@@ -83,4 +116,8 @@ md-sidenav:hover .open-conversation-form {
   top: 4px;
   left: 3px;
   font-size: 3.5em;
+}
+
+md-dialog ::-webkit-scrollbar {
+    display: none;
 }

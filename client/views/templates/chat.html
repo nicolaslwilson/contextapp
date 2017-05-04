@@ -1,7 +1,7 @@
 <div class="container" layout="row" flex>
     <md-sidenav
       md-is-locked-open="$mdMedia('gt-sm')"
-      class="md-whiteframe-4dp md-padding"
+      class="md-whiteframe-4dp"
       md-component-id="contactsPane">
         <div class="contacts-box">
             <h3>Contacts</h3>
@@ -114,7 +114,7 @@
                     md-items="item in chat.querySearch(chat.searchText)"
                     md-item-text="item.username"
                     placeholder="New Conversation">
-                      <span md-highlight-text="user.searchText">
+                      <span md-highlight-text="chat.searchText">
                         {{item.username}}
                       </span>
                   </md-autocomplete>
@@ -159,7 +159,7 @@
                           <i class="material-icons">account_circle</i>
                           <i
                             ng-style="{color: (message.tag ?  ('#' + chat.intToRGB(chat.hashCode(message.tag))) : 'black')}"
-                            ng-click="chat.inputTag(message._id)"
+                            ng-click="chat.showDialog($event, message, chat.socket.conversation.tags)"
                             class="material-icons">
                               {{message.tag ? "label" : "label_outline";}}
                           </i>
@@ -179,8 +179,6 @@
                               </p>
                           </div>
                         </div>
-
-
                     </md-list-item>
                 </md-list>
 
@@ -211,7 +209,7 @@
         <md-sidenav
           md-is-locked-open='true'
           class="chat-info-container md-whiteframe-2dp"
-          flex="20"
+          flex="25"
           layout="column">
             <div
               class="tag-cloud"
