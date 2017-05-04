@@ -146,8 +146,12 @@ main {
   border-radius: 0;
 }
 
+.conversation button {
+  margin: 0;
+}
+
 .conversation-participants-list {
-  padding: 0 1em;
+
 }
 
 .conversation-participants-list p {
@@ -178,6 +182,13 @@ main {
 
 md-sidenav:hover .open-conversation-form {
   display: block;
+}
+
+md-sidenav h3 {
+  background-color: #5774db;
+  color: white;
+  padding: 1em;
+  margin: 0;
 }
 
 .open-conversation-form .material-icons {
