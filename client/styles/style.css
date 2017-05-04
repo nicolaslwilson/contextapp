@@ -54,6 +54,19 @@ main {
   margin: 0;
 }
 
+.contacts-box md-list {
+  padding: 0px;
+}
+
+.request {
+
+}
+
+.request>button{
+  margin: 0;
+  border-bottom: 1px solid #40bf73;
+}
+
 .request .confirm-request {
   float: right;
 }
@@ -61,6 +74,12 @@ main {
 .request .confirm-request button{
   padding: 0;
   margin: 0;
+}
+
+.contact>button{
+  margin: 0;
+  border-bottom: 1px solid #03a9f4;
+  border-radius: 0;
 }
 
 .conversation-participants-list {
