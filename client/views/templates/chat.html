@@ -21,7 +21,7 @@
                       layout="row"
                       layout-align="start center"
                       flex="grow">
-                      <i class="material-icons">account_circle</i>
+                      <img ng-src="https://api.adorable.io/avatars/40/{{requestObject._id}}.png" alt="">
                       <span>{{requestObject.username}}</span>
                     </div>
                     <div class="confirm-request" flex="auto">
@@ -49,7 +49,7 @@
                     <md-button
                       class=""
                       layout="row" flex>
-                        <i class="material-icons">account_circle</i>
+                        <img ng-src="https://api.adorable.io/avatars/40/{{contactObject._id}}.png" alt="">
                         <span>{{contactObject.username}}</span>
                     </md-button>
                 </md-list-item>
@@ -86,11 +86,15 @@
                           <i class="material-icons">chat</i>
                         </div>
                         <div class="conversation-participants-list" layout="wrap" flex="grow">
+
                             <p
                               class="conversation-participant"
                               ng-if="participant.username !== chat.user.data.username"
                               ng-repeat="participant in conversationObject.participants">
-                                {{participant.username}}
+                              <img
+                                ng-if="participant.username !== chat.user.data.username"
+                                ng-src="https://api.adorable.io/avatars/40/{{participant._id}}.png" alt="">
+                              {{participant.username}}
                             </p>
                         </div>
                     </md-button>
@@ -147,24 +151,24 @@
           layout="column"
           flex>
             <md-content
-              class="md-padding messages"
+              class="messages"
               flex="grow">
                 <md-list>
                     <md-list-item
                       ng-repeat="message in chat.socket.conversation.messages | orderBy: 'createdAt'"
-                      class="message md-3-line"
+                      class="message"
                       ng-class="{received: message.author._id != chat.user.data._id, me: message.author._id == chat.user.data._id}"
-                      layout="row" ;>
-                        <div class="message-metadata" layout="column">
-                          <i class="material-icons">account_circle</i>
+                      layout="row" flex>
+                        <div class="message-metadata" layout="row" layout-align="start start" flex="auto">
                           <i
-                            ng-style="{color: (message.tag ?  ('#' + chat.intToRGB(chat.hashCode(message.tag))) : 'black')}"
+                            ng-style="{color: (message.tag ?  ('#' + chat.intToRGB(chat.hashCode(message.tag))) : 'white')}"
                             ng-click="chat.showDialog($event, message, chat.socket.conversation.tags)"
-                            class="material-icons">
-                              {{message.tag ? "label" : "label_outline";}}
+                            class="tag-icon fa fa-tags">
                           </i>
+                          <img ng-src="https://api.adorable.io/avatars/40/{{message.author._id}}.png" alt="">
+
                         </div>
-                        <div class="message-body" layout="column">
+                        <div class="message-body" layout="column" flex="grow">
                           <div class="md-list-item-text">
                               <div class="message-body-header">
                                 <span class="message-author-username">

@@ -10,6 +10,25 @@ html, body {
   padding: 0px;
 }
 
+.menu {
+  background-color: transparent;
+  border: none;
+  height: 38px;
+  margin: 16px;
+  width: 36px;
+}
+
+md-toolbar h1 {
+  margin: auto;
+}
+
+md-toolbar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 3px;
+  margin: auto 0;
+}
+
 main {
   width: 100%;
   max-width: 1600px;
@@ -25,6 +44,11 @@ main {
   color: white;
 }
 
+.messages-container {
+
+}
+
+
 .messages-container ::-webkit-scrollbar {
     display: none;
 }
@@ -33,13 +57,20 @@ main {
     display: block;
 }
 
+.messages .message {
+  padding: 10px 0px 5px 15px;
+}
 
 .messages .message .md-list-item-text {
-  margin: 0;
+  margin: 0.2em 0;
 }
 
 .message .message-body {
-  padding-left: 1em;
+  padding-left: .5em;
+}
+
+.message .message-author-username {
+  font-weight: bold;
 }
 
 .message .message-timestamp {
@@ -47,8 +78,26 @@ main {
   color: #9e9e9e;
 }
 
-.message i {
+.message .message-metadata {
+  position: relative;
+  top: 3px;
+}
 
+.message .message-metadata img {
+  border-radius: 3px;
+}
+
+.message .tag-icon {
+  font-size: 1.7em;
+  padding: 0.4em;
+}
+
+.message-metadata:hover .tag-icon {
+  color: #03a9f4 !important;
+}
+
+.message p {
+  margin: 0;
 }
 
 .message.me {
@@ -71,9 +120,15 @@ main {
 
 }
 
+.contact img, .request img {
+  width: 30px;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+
 .request>button{
   margin: 0;
-  border-bottom: 1px solid #40bf73;
+  /*border-bottom: 1px solid #40bf73;*/
 }
 
 .request .confirm-request {
@@ -87,7 +142,7 @@ main {
 
 .contact>button{
   margin: 0;
-  border-bottom: 1px solid #03a9f4;
+  /*border-bottom: 1px solid #03a9f4;*/
   border-radius: 0;
 }
 
@@ -105,6 +160,11 @@ main {
 }
 .conversation-participant:first-child::before {
   content: '';
+}
+
+.conversation-participant img {
+  max-width: 20px;
+  margin-right: 2px;
 }
 
 .create-conversation-form-submit button {
