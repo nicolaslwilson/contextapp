@@ -146,6 +146,14 @@ main {
   border-radius: 0;
 }
 
+.contact-form {
+  padding: 0.2em 1em;
+}
+
+.contact-form md-input-container{
+  margin: 0;
+}
+
 .conversation button {
   margin: 0;
 }
@@ -168,7 +176,7 @@ main {
 
 .conversation-participant img {
   max-width: 20px;
-  margin-right: 2px;
+  margin: 0 2px;
 }
 
 .create-conversation-form-submit button {

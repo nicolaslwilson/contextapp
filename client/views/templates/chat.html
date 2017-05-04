@@ -54,8 +54,8 @@
                     </md-button>
                 </md-list-item>
             </md-list>
-            <form layout="row" ng-submit="chat.addContact(chat.inputUserName)">
-              <md-input-container>
+            <form class="contact-form" layout="row" ng-submit="chat.addContact(chat.inputUserName)" flex>
+              <md-input-container flex="75">
                 <label>Username</label>
                 <input
                   type="text"
@@ -65,6 +65,7 @@
               <md-button
                 class="md-primary"
                 type="submit"
+                flex="25"
                 >
                   Add
               </md-button>
