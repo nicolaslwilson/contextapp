@@ -161,8 +161,8 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
          parent: parentEl,
          targetEvent: $event,
          template:
-           '<md-dialog aria-label="List dialog">' +
-           '  <md-dialog-content layout="column">'+
+           '<md-dialog aria-label="List dialog" layout="column" flex="30">' +
+           '  <md-dialog-content flex>'+
            `
            {{alert}}
            <form

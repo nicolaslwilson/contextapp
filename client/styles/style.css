@@ -117,3 +117,7 @@ md-sidenav:hover .open-conversation-form {
   left: 3px;
   font-size: 3.5em;
 }
+
+md-dialog ::-webkit-scrollbar {
+    display: none;
+}
