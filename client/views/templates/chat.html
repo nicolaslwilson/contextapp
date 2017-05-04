@@ -114,7 +114,7 @@
                     md-items="item in chat.querySearch(chat.searchText)"
                     md-item-text="item.username"
                     placeholder="New Conversation">
-                      <span md-highlight-text="user.searchText">
+                      <span md-highlight-text="chat.searchText">
                         {{item.username}}
                       </span>
                   </md-autocomplete>
@@ -159,7 +159,7 @@
                           <i class="material-icons">account_circle</i>
                           <i
                             ng-style="{color: (message.tag ?  ('#' + chat.intToRGB(chat.hashCode(message.tag))) : 'black')}"
-                            ng-click="chat.inputTag(message._id)"
+                            ng-click="chat.showDialog($event, message, chat.socket.conversation.tags)"
                             class="material-icons">
                               {{message.tag ? "label" : "label_outline";}}
                           </i>

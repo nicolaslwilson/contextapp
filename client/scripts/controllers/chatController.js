@@ -1,4 +1,4 @@
-myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav', 'UserService', 'SocketService', function($scope, $http, $location, $mdSidenav, UserService, SocketService) {
+myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav', '$mdDialog', 'UserService', 'SocketService', function($scope, $http, $location, $mdSidenav, $mdDialog, UserService, SocketService) {
   var chat = this;
   chat.user = UserService.userObject;
   chat.socket = SocketService;
@@ -6,6 +6,7 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
   chat.acceptContact = UserService.acceptContact;
   chat.removeContact = UserService.removeContact;
 
+  chat.showDialog = showDialog;
 
   chat.createConversation = createConversation;
   chat.selectedFilter = -1;
@@ -18,6 +19,13 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
   chat.searchText = null;
   chat.querySearch = querySearch;
   chat.createNewConversationFormOpen = false;
+
+
+  chat.tagDialogInput = "Hey";
+  chat.selectedTag = null;
+  chat.searchTagText = null;
+  chat.querySearchTags = querySearchTags;
+
 
   chat.hashCode = hashCode;
   chat.intToRGB = intToRGB;
@@ -37,6 +45,13 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
       var results = query ? chat.user.data.contactList.filter(createFilterFor(query)) : [];
       console.log(chat.user.data.contactList, query, results);
       return results;
+  }
+
+  function querySearchTags (query) {
+
+      var results = query ? chat.socket.conversation.tags.filter(createFilterForTag(query)) : [];
+      console.log(chat.socket.conversation.tags, query, results);
+      return results;
     }
 
   function createFilterFor(query) {
@@ -47,6 +62,18 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
       angular.lowercase(contact.username);
       console.log(lowercaseUsername);
       return (lowercaseUsername.indexOf(lowercaseQuery) === 0);
+    };
+
+  }
+
+  function createFilterForTag(query) {
+    var lowercaseQuery = angular.lowercase(query);
+
+    return function filterFn(tag) {
+      var lowercaseTag =
+      angular.lowercase(tag);
+      console.log(lowercaseTag);
+      return (lowercaseTag.indexOf(lowercaseQuery) === 0);
     };
 
   }
@@ -126,6 +153,76 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
         .toUpperCase();
 
     return "00000".substring(0, 6 - c.length) + c;
-}
+  }
+
+  function showDialog($event, message, tags) {
+       var parentEl = angular.element(document.body);
+       $mdDialog.show({
+         parent: parentEl,
+         targetEvent: $event,
+         template:
+           '<md-dialog aria-label="List dialog">' +
+           '  <md-dialog-content layout="column">'+
+           `
+           {{alert}}
+           <form
+             class="add-tag-form"
+             ng-submit="closeDialog(tag)"
+             layout="column"
+             flex>
+             <md-input-container>
+              <label>Input a tag or select one from below</label>
+              <input type="text" ng-model="tag">
+             </md-input-container>
+           </form>
+           <div
+             class="tag-cloud"
+             layout="row"
+             ng-click="chat.removeFilter()"
+             layout-wrap>
+               <md-button
+                 ng-style="{color: ('#' + chat.intToRGB(chat.hashCode(tag)))}"
+                 md-no-ink="true" class="md-raised tag"
+                 ng-repeat="tag in tags"
+                 ng-click="closeDialog(tag)">
+                   {{tag}}
+               </md-button>
+           </div>
+           ` +
+           '  </md-dialog-content>' +
+           '  <md-dialog-actions>' +
+           '    <md-button ng-click="closeDialog(tag)" class="md-primary">' +
+           '      Add Tag' +
+           '    </md-button>' +
+           '    <md-button ng-click="cancel()" class="md-primary">' +
+           '      Cancel' +
+           '    </md-button>' +
+           '  </md-dialog-actions>' +
+           '</md-dialog>',
+         locals: {
+           messageObject: message,
+           tags: tags
+         },
+         scope: $scope,
+         preserveScope: true,
+         controller: DialogController
+      });
+      function DialogController($scope, $mdDialog, messageObject, tags) {
+        $scope.alert = '';
+        $scope.tag = messageObject.tag;
+        $scope.tags = tags;
+        $scope.cancel = $mdDialog.hide;
+        $scope.closeDialog = function(tag) {
+          if (tag) {
+            messageObject.tag = tag;
+            chat.addTag(messageObject._id, tag);
+            $mdDialog.hide();
+          } else {
+            $scope.alert = "Please input a tag";
+          }
+
+        };
+      }
+    }
 
 }]);
