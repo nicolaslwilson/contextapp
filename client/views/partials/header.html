@@ -2,6 +2,6 @@
   <md-button ng-if="chat.user.data.username" class=""  ng-disabled="" aria-label="sidebar" md-no-ink="true" ng-click="chat.toggleContacts()" aria-label="Show Contacts Pane" hide-gt-sm><i class="material-icons">menu</i></md-button>
   <h1>contexty.us</h1>
   <img
-    ng-src="https://api.adorable.io/avatars/40/{{chat.user.data._id}}.png" alt="">
+    ng-src="https://api.adorable.io/avatars/40/{{chat.user.data.username}}.png" alt="">
   <md-button  ng-if="chat.user.data.username" class=""  ng-disabled="" aria-label="sidebar" md-no-ink="true" ng-click="chat.logout()">Log out</md-button>
 </md-toolbar>
