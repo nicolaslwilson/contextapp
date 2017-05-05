@@ -20,12 +20,16 @@ myApp.factory('UserService', ['$http', '$location', 'SocketService', function($h
       });
     },
     addContact: function (username) {
-      $http.post('/user/add', {username: username}).then(function(response){
+      return $http.post('/user/add', {username: username}).then(function(response){
         console.log('addContact response', response);
         if (response.status !== 200) {
           alert("Request Failed");
+
+          return false;
         } else {
           userObject.data = response.data;
+
+          return true;
         }
 
       });
