@@ -4,8 +4,13 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
   chat.socket = SocketService;
   chat.addContact = function (username) {
     UserService.addContact(username).then(function (response) {
+      console.log(response);
       if (response) {
         showFriendRequestSuccessToast();
+        chat.inputUserName = "";
+      }
+      else {
+        showFriendRequestFailToast();
       }
     });
   };
@@ -235,6 +240,14 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
       $mdToast.show(
         $mdToast.simple()
           .textContent('Contact Request Successful')
+          .hideDelay(3000)
+      );
+    }
+
+    function showFriendRequestFailToast () {
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent('Failed To Find Contact')
           .hideDelay(3000)
       );
     }
