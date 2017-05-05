@@ -18,6 +18,10 @@ html, body {
   width: 36px;
 }
 
+md-toolbar {
+  background-color: #4263d7 !important;
+}
+
 md-toolbar h1 {
   margin: auto;
 }
@@ -146,8 +150,20 @@ main {
   border-radius: 0;
 }
 
+.contact-form {
+  padding: 0.2em 1em;
+}
+
+.contact-form md-input-container{
+  margin: 0;
+}
+
+.conversation button {
+  margin: 0;
+}
+
 .conversation-participants-list {
-  padding: 0 1em;
+
 }
 
 .conversation-participants-list p {
@@ -164,7 +180,11 @@ main {
 
 .conversation-participant img {
   max-width: 20px;
-  margin-right: 2px;
+  margin: 0 2px;
+}
+
+.create-conversation-form {
+  padding: 0.2em 1em;
 }
 
 .create-conversation-form-submit button {
@@ -173,18 +193,28 @@ main {
 
 .open-conversation-form {
   display: none;
-  float: right;
+  position: absolute;
+  bottom: 12px;
+  right: 10px;
 }
 
 md-sidenav:hover .open-conversation-form {
   display: block;
 }
 
+md-sidenav h3, md-sidenav h4 {
+  background-color: #5774db;
+  color: white;
+  padding: 1em;
+  margin: 0;
+}
+
 .open-conversation-form .material-icons {
   position: absolute;
   top: 4px;
-  left: 3px;
+  left: 4px;
   font-size: 3.5em;
+  font-weight: bolder;
 }
 
 md-dialog ::-webkit-scrollbar {

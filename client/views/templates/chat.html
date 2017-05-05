@@ -21,7 +21,7 @@
                       layout="row"
                       layout-align="start center"
                       flex="grow">
-                      <img ng-src="https://api.adorable.io/avatars/40/{{requestObject._id}}.png" alt="">
+                      <img ng-src="https://api.adorable.io/avatars/40/{{requestObject.username}}.png" alt="">
                       <span>{{requestObject.username}}</span>
                     </div>
                     <div class="confirm-request" flex="auto">
@@ -49,13 +49,13 @@
                     <md-button
                       class=""
                       layout="row" flex>
-                        <img ng-src="https://api.adorable.io/avatars/40/{{contactObject._id}}.png" alt="">
+                        <img ng-src="https://api.adorable.io/avatars/40/{{contactObject.username}}.png" alt="">
                         <span>{{contactObject.username}}</span>
                     </md-button>
                 </md-list-item>
             </md-list>
-            <form layout="row" ng-submit="chat.addContact(chat.inputUserName)">
-              <md-input-container>
+            <form class="contact-form" layout="row" ng-submit="chat.addContact(chat.inputUserName)" flex>
+              <md-input-container flex="75">
                 <label>Username</label>
                 <input
                   type="text"
@@ -65,6 +65,7 @@
               <md-button
                 class="md-primary"
                 type="submit"
+                flex="25"
                 >
                   Add
               </md-button>
@@ -83,7 +84,7 @@
                       ng-click="chat.joinConversation(conversationObject._id)"
                       layout="row" layout-align="start center" flex>
                         <div flex="auto">
-                          <i class="material-icons">chat</i>
+                          <!-- <i class="material-icons">chat</i> -->
                         </div>
                         <div class="conversation-participants-list" layout="wrap" flex="grow">
 
@@ -93,7 +94,7 @@
                               ng-repeat="participant in conversationObject.participants">
                               <img
                                 ng-if="participant.username !== chat.user.data.username"
-                                ng-src="https://api.adorable.io/avatars/40/{{participant._id}}.png" alt="">
+                                ng-src="https://api.adorable.io/avatars/40/{{participant.username}}.png" alt="">
                               {{participant.username}}
                             </p>
                         </div>
@@ -136,7 +137,6 @@
                 </md-button>
               </div>
             </form>
-
             <md-button
               class="open-conversation-form md-fab md-primary md-hue-1"
               ng-hide="chat.createNewConversationFormOpen"
@@ -165,7 +165,7 @@
                             ng-click="chat.showDialog($event, message, chat.socket.conversation.tags)"
                             class="tag-icon fa fa-tags">
                           </i>
-                          <img ng-src="https://api.adorable.io/avatars/40/{{message.author._id}}.png" alt="">
+                          <img ng-src="https://api.adorable.io/avatars/40/{{message.author.username}}.png" alt="">
 
                         </div>
                         <div class="message-body" layout="column" flex="grow">
@@ -215,6 +215,7 @@
           class="chat-info-container md-whiteframe-2dp"
           flex="25"
           layout="column">
+            <h4>Tags</h4>
             <div
               class="tag-cloud"
               layout="row"

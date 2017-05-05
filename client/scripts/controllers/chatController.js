@@ -1,8 +1,19 @@
-myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav', '$mdDialog', 'UserService', 'SocketService', function($scope, $http, $location, $mdSidenav, $mdDialog, UserService, SocketService) {
+myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav', '$mdDialog', '$mdToast', 'UserService', 'SocketService', function($scope, $http, $location, $mdSidenav, $mdDialog, $mdToast, UserService, SocketService) {
   var chat = this;
   chat.user = UserService.userObject;
   chat.socket = SocketService;
-  chat.addContact = UserService.addContact;
+  chat.addContact = function (username) {
+    UserService.addContact(username).then(function (response) {
+      console.log(response);
+      if (response) {
+        showFriendRequestSuccessToast();
+        chat.inputUserName = "";
+      }
+      else {
+        showFriendRequestFailToast();
+      }
+    });
+  };
   chat.acceptContact = UserService.acceptContact;
   chat.removeContact = UserService.removeContact;
 
@@ -224,5 +235,23 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
         };
       }
     }
+
+    function showFriendRequestSuccessToast () {
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent('Contact Request Successful')
+          .hideDelay(3000)
+      );
+    }
+
+    function showFriendRequestFailToast () {
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent('Failed To Find Contact')
+          .hideDelay(3000)
+      );
+    }
+
+
 
 }]);

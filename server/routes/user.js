@@ -14,7 +14,7 @@ router.post('/add', isLoggedIn, function (req, res) {
   //Verify contact is not self
   if (contact.username == initiator.username) {
     console.log('Can\'t add self as contact');
-    res.sendStatus(500);
+    res.sendStatus(403);
   }
   //Push request to user
   User.findOneAndUpdate(
@@ -24,12 +24,12 @@ router.post('/add', isLoggedIn, function (req, res) {
     function (err, contactFromQuery) {
       if (err) {
         console.log(err);
-        res.sendStatus(500);
+        res.sendStatus(403);
       } else if (contactFromQuery) {
         assembleUserDataAndSendResponse(initiator._id, res);
       }
       else {
-        res.sendStatus(500);
+        res.sendStatus(403);  
       }
     });
 });
