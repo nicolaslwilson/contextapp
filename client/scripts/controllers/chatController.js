@@ -172,9 +172,8 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
          parent: parentEl,
          targetEvent: $event,
          template:
-           '<md-dialog aria-label="List dialog" layout="column" flex="30">' +
-           '  <md-dialog-content flex>'+
-           `
+          `<md-dialog aria-label="List dialog" layout="column" flex="30">
+            <md-dialog-content flex>'
            {{alert}}
            <form
              class="add-tag-form"
@@ -199,17 +198,16 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
                    {{tag}}
                </md-button>
            </div>
-           ` +
-           '  </md-dialog-content>' +
-           '  <md-dialog-actions>' +
-           '    <md-button ng-click="closeDialog(tag)" class="md-primary">' +
-           '      Add Tag' +
-           '    </md-button>' +
-           '    <md-button ng-click="cancel()" class="md-primary">' +
-           '      Cancel' +
-           '    </md-button>' +
-           '  </md-dialog-actions>' +
-           '</md-dialog>',
+             </md-dialog-content>
+             <md-dialog-actions>
+              <md-button ng-click="closeDialog(tag)" class="md-primary">
+                 Add Tag
+              </md-button>
+              <md-button ng-click="cancel()" class="md-primary">
+                 Cancel
+              </md-button>
+             </md-dialog-actions>
+           </md-dialog>`,
          locals: {
            messageObject: message,
            tags: tags
