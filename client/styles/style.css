@@ -24,6 +24,10 @@ md-toolbar {
 
 md-toolbar h1 {
   margin: auto;
+  font-family: Helvetica !important;
+  letter-spacing: .1em;
+
+
 }
 
 md-toolbar img {
@@ -187,19 +191,34 @@ main {
   padding: 0.2em 1em;
 }
 
-.create-conversation-form-submit button {
-  float: right;
+.create-conversation-form-submit, .create-conversation-form-cancel {
+  display: inline;
 }
 
-.open-conversation-form {
+.create-conversation-form-submit button {
+  float: right;
+  display: inline;
+}
+
+}
+
+.create-conversation-form-cancel button {
+  float: right;
+  display: inline;
+}
+
+md-sidenav .open-conversation-form {
   display: none;
-  position: absolute;
+  position: fixed;
   bottom: 12px;
   right: 10px;
 }
 
 md-sidenav:hover .open-conversation-form {
   display: block;
+  position: fixed;
+  bottom: 12px;
+  right: 10px;
 }
 
 md-sidenav h3, md-sidenav h4 {
@@ -209,12 +228,26 @@ md-sidenav h3, md-sidenav h4 {
   margin: 0;
 }
 
+.contacts-pane {
+  height: 100%;
+  overflow: hidden;
+}
+
+.contacts-pane {
+  height: 100%;
+  overflow: auto;
+}
+
 .open-conversation-form .material-icons {
   position: absolute;
   top: 4px;
   left: 4px;
   font-size: 3.5em;
   font-weight: bolder;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 md-dialog ::-webkit-scrollbar {

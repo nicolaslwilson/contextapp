@@ -14,8 +14,28 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
       }
     });
   };
-  chat.acceptContact = UserService.acceptContact;
-  chat.removeContact = UserService.removeContact;
+  chat.acceptContact = function (id) {
+    UserService.acceptContact(id).then(function(response) {
+      console.log(response);
+      if (response) {
+        showToast('Friend Request Accepted');
+      }
+      else {
+        showToast('Error');
+      }
+    });
+  };
+  chat.removeContact = function (id) {
+    UserService.removeContact(id).then(function(response) {
+      console.log(response);
+      if (response) {
+        showToast('Friend Request Denied');
+      }
+      else {
+        showToast('Error');
+      }
+    });
+  };
 
   chat.showDialog = showDialog;
 
@@ -234,10 +254,18 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
       }
     }
 
+    function showToast (text) {
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent(text)
+          .hideDelay(3000)
+      );
+    }
+
     function showFriendRequestSuccessToast () {
       $mdToast.show(
         $mdToast.simple()
-          .textContent('Contact Request Successful')
+          .textContent('Contact Request Pending')
           .hideDelay(3000)
       );
     }
