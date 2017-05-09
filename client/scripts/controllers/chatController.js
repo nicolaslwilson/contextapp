@@ -277,7 +277,4 @@ myApp.controller('ChatController', ['$scope', '$http', '$location', '$mdSidenav'
           .hideDelay(3000)
       );
     }
-
-
-
 }]);
