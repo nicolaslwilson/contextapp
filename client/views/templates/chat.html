@@ -1,238 +1,156 @@
 <div class="container" layout="row" flex>
-<!-- Contacts Pane -->
-    <md-sidenav
-      md-is-locked-open="$mdMedia('gt-sm')"
-      class="md-whiteframe-4dp"
-      md-component-id="contactsPane">
-        <div class="contacts-box">
-            <h3>Contacts</h3>
-<!-- Contact Requests -->
-            <md-list
-              class="requests-container"
-              ng-click="chat.toggleContacts()">
-                <md-list-item
-                  ng-repeat="requestObject in chat.user.data.requestList"
-                  class="request"
-                  layout="row">
-                  <md-button
-                    aria-label="contact-request"
-                    md-no-ink="true"
-                    layout="row" flex>
-                    <div
-                      class="contact-info"
-                      layout="row"
-                      layout-align="start center"
-                      flex="grow">
-                      <img ng-src="https://api.adorable.io/avatars/40/{{requestObject.username}}.png" alt="">
-                      <span>{{requestObject.username}}</span>
-                    </div>
-                    <div class="confirm-request" flex="auto">
-                        <md-button
-                          class="md-primary md-icon-button"
-                          ng-click="chat.acceptContact(requestObject._id)">
+    <!-- Contacts Pane -->
+    <md-sidenav md-is-locked-open="$mdMedia('gt-sm')" class="md-whiteframe-4dp contacts-pane" md-component-id="contactsPane" layout="column" flex>
+        <md-content class="contacts-pane-content">
+            <div class="contacts-box">
+                <h3>Contacts</h3>
+                <!-- Contact Requests -->
+                <md-list class="requests-container" ng-click="chat.toggleContacts()">
+                    <md-list-item ng-repeat="requestObject in chat.user.data.requestList" class="request" layout="row">
+                        <md-button aria-label="contact-request" md-no-ink="true" layout="row" flex>
+                            <div class="contact-info" layout="row" layout-align="start center" flex="grow">
+                                <img ng-src="https://api.adorable.io/avatars/40/{{requestObject.username}}.png" alt="">
+                                <span>{{requestObject.username}}</span>
+                            </div>
+                            <div class="confirm-request" flex="auto">
+                                <md-button class="md-primary md-icon-button" ng-click="chat.acceptContact(requestObject._id)">
+                                    <i class="material-icons">done</i>
+                                </md-button>
+                                <md-button class="md-icon-button" ng-click="chat.removeContact(requestObject._id)">
+                                    <i class="material-icons">block</i>
+                                </md-button>
+                            </div>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+                <!-- Confirmed Contacts -->
+                <md-list class="contacts-container" ng-click="chat.toggleContacts()">
+                    <md-list-item ng-repeat="contactObject in chat.user.data.contactList" class="contact" layout="row" flex>
+                        <md-button class="" layout="row" flex>
+                            <img ng-src="https://api.adorable.io/avatars/40/{{contactObject.username}}.png" alt="">
+                            <span>{{contactObject.username}}</span>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+                <form class="contact-form" layout="row" ng-submit="chat.addContact(chat.inputUserName)" flex>
+                    <md-input-container flex="75">
+                        <label>Username</label>
+                        <input type="text" class="form-control" ng-model="chat.inputUserName" />
+                    </md-input-container>
+                    <md-button class="md-primary" type="submit" flex="25">
+                        Add
+                    </md-button>
+                </form>
+            </div>
+            <!-- Conversation List -->
+            <div class="conversations-box">
+                <h3>Conversations</h3>
+                <md-list class="conversations-container" ng-click="chat.toggleContacts()" layout="column">
+                    <md-list-item ng-repeat="conversationObject in chat.user.data.conversationList" class="conversation" layout="row" flex>
+                        <md-button class="" ng-click="chat.joinConversation(conversationObject._id)" layout="row" layout-align="start center" flex>
+                            <div flex="auto">
+                                <!-- <i class="material-icons">chat</i> -->
+                            </div>
+                            <div class="conversation-participants-list" layout="wrap" flex="grow">
+                                <p class="conversation-participant" ng-if="participant.username !== chat.user.data.username" ng-repeat="participant in conversationObject.participants">
+                                    <img ng-if="participant.username !== chat.user.data.username" ng-src="https://api.adorable.io/avatars/40/{{participant.username}}.png" alt=""> {{participant.username}}
+                                </p>
+                            </div>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+            </div>
+            <!-- Create New Conversation Form -->
+        </md-content >
+        <div>
+            <form class="create-conversation-form" ng-submit="chat.createConversation(chat.selectedUsers)" ng-show="chat.createNewConversationFormOpen" layout="column" flex>
+                <md-chips ng-model="chat.selectedUsers" md-autocomplete-snap md-transform-chip="chat.transformChip($chip)" md-require-match="true">
+                    <md-autocomplete md-selected-item="chat.selectedItem" md-search-text="chat.searchText" md-items="item in chat.querySearch(chat.searchText)" md-item-text="item.username" placeholder="New Conversation">
+                        <span md-highlight-text="chat.searchText">
+                      {{item.username}}
+                    </span>
+                    </md-autocomplete>
+                    <md-chip-template>
+                        <span>
+                      <strong>{{$chip.username}}</strong>
+                    </span>
+                    </md-chip-template>
+                </md-chips>
+                <div layout="row" layout-align="end end">
+                  <div class="create-conversation-form-submit" flex="auto">
+                      <md-button class="md-icon-button md-primary md-hue-2" type="submit">
                           <i class="material-icons">done</i>
-                        </md-button>
-                        <md-button
-                          class="md-icon-button"
-                          ng-click="chat.removeContact(requestObject._id)">
-                          <i class="material-icons">block</i>
-                        </md-button>
-                    </div>
-                  </md-button>
-                </md-list-item>
-            </md-list>
-<!-- Confirmed Contacts -->
-            <md-list
-              class="contacts-container"
-              ng-click="chat.toggleContacts()">
-                <md-list-item
-                  ng-repeat="contactObject in chat.user.data.contactList"
-                  class="contact"
-                  layout="row" flex>
-                    <md-button
-                      class=""
-                      layout="row" flex>
-                        <img ng-src="https://api.adorable.io/avatars/40/{{contactObject.username}}.png" alt="">
-                        <span>{{contactObject.username}}</span>
-                    </md-button>
-                </md-list-item>
-            </md-list>
-            <form class="contact-form" layout="row" ng-submit="chat.addContact(chat.inputUserName)" flex>
-              <md-input-container flex="75">
-                <label>Username</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  ng-model="chat.inputUserName" />
-              </md-input-container>
-              <md-button
-                class="md-primary"
-                type="submit"
-                flex="25"
-                >
-                  Add
-              </md-button>
+                      </md-button>
+                  </div>
+                  <div class="create-conversation-form-cancel" flex="10">
+                      <md-button
+                        class="md-icon-button"
+                        type="button"
+                        ng-click="chat.createNewConversationFormOpen = false">
+                          <i class="material-icons">clear</i>
+                      </md-button>
+                  </div>
+                </div>
             </form>
-        </div>
-<!-- Conversation List -->
-        <div class="conversations-box">
-            <h3>Conversations</h3>
-            <md-list
-              class="conversations-container"
-              ng-click="chat.toggleContacts()" layout="column">
-                <md-list-item
-                  ng-repeat="conversationObject in chat.user.data.conversationList"
-                  class="conversation" layout="row" flex>
-                    <md-button
-                      class=""
-                      ng-click="chat.joinConversation(conversationObject._id)"
-                      layout="row" layout-align="start center" flex>
-                        <div flex="auto">
-                          <!-- <i class="material-icons">chat</i> -->
-                        </div>
-                        <div class="conversation-participants-list" layout="wrap" flex="grow">
-                            <p
-                              class="conversation-participant"
-                              ng-if="participant.username !== chat.user.data.username"
-                              ng-repeat="participant in conversationObject.participants">
-                              <img
-                                ng-if="participant.username !== chat.user.data.username"
-                                ng-src="https://api.adorable.io/avatars/40/{{participant.username}}.png" alt="">
-                              {{participant.username}}
-                            </p>
-                        </div>
-                    </md-button>
-                </md-list-item>
-            </md-list>
-<!-- Create New Conversation Form -->
-            <form
-              class="create-conversation-form"
-              ng-submit="chat.createConversation(chat.selectedUsers)"
-              ng-show="chat.createNewConversationFormOpen"
-              layout="column"
-              flex>
-              <md-chips
-                ng-model="chat.selectedUsers"
-                md-autocomplete-snap
-                md-transform-chip="chat.transformChip($chip)"
-                md-require-match="true"
-              >
-                  <md-autocomplete
-                    md-selected-item="chat.selectedItem"
-                    md-search-text="chat.searchText"
-                    md-items="item in chat.querySearch(chat.searchText)"
-                    md-item-text="item.username"
-                    placeholder="New Conversation">
-                      <span md-highlight-text="chat.searchText">
-                        {{item.username}}
-                      </span>
-                  </md-autocomplete>
-                  <md-chip-template>
-                      <span>
-                        <strong>{{$chip.username}}</strong>
-                      </span>
-                  </md-chip-template>
-              </md-chips>
-              <div class="create-conversation-form-submit">
-                <md-button
-                  class="md-icon-button md-primary md-hue-2"
-                  type="submit">
-                    <i class="material-icons">done</i>
-                </md-button>
-              </div>
-            </form>
-            <md-button
-              class="open-conversation-form md-fab md-primary md-hue-1"
-              ng-hide="chat.createNewConversationFormOpen"
-              ng-click="chat.createNewConversationFormOpen = true">
+            <md-button class="open-conversation-form md-fab md-primary md-hue-1" ng-hide="chat.createNewConversationFormOpen" ng-click="chat.createNewConversationFormOpen = true">
                 <i class="material-icons">add</i>
             </md-button>
         </div>
+
     </md-sidenav>
-<!-- Conversation View -->
+    <!-- Conversation View -->
     <div layout="row" flex>
-        <div
-          class="messages-container"
-          layout="column"
-          flex>
-            <md-content
-              class="messages"
-              flex="grow">
+        <div class="messages-container" layout="column" flex>
+            <md-content class="messages" flex="grow">
                 <md-list>
-                    <md-list-item
-                      ng-repeat="message in chat.socket.conversation.messages | orderBy: 'createdAt'"
-                      class="message"
-                      ng-class="{received: message.author._id != chat.user.data._id, me: message.author._id == chat.user.data._id}"
-                      layout="row" flex>
+                    <md-list-item ng-repeat="message in chat.socket.conversation.messages | orderBy: 'createdAt'" class="message" ng-class="{received: message.author._id != chat.user.data._id, me: message.author._id == chat.user.data._id}" layout="row" flex>
                         <div class="message-metadata" layout="row" layout-align="start start" flex="auto">
-                          <i
-                            ng-style="{color: (message.tag ?  ('#' + chat.intToRGB(chat.hashCode(message.tag))) : 'white')}"
-                            ng-click="chat.showDialog($event, message, chat.socket.conversation.tags)"
-                            class="tag-icon fa fa-tags">
+                            <i ng-style="{color: (message.tag ?  ('#' + chat.intToRGB(chat.hashCode(message.tag))) : 'white')}" ng-click="chat.showDialog($event, message, chat.socket.conversation.tags)" class="tag-icon fa fa-tags">
                           </i>
-                          <img ng-src="https://api.adorable.io/avatars/40/{{message.author.username}}.png" alt="">
+                            <img ng-src="https://api.adorable.io/avatars/40/{{message.author.username}}.png" alt="">
 
                         </div>
                         <div class="message-body" layout="column" flex="grow">
-                          <div class="md-list-item-text">
-                              <div class="message-body-header">
-                                <span class="message-author-username">
+                            <div class="md-list-item-text">
+                                <div class="message-body-header">
+                                    <span class="message-author-username">
                                   {{message.author.username}}
                                 </span>
-                                <span class="message-timestamp">
+                                    <span class="message-timestamp">
                                   {{message.createdAt | date: 'shortTime'}}
                                 </span>
-                              </div>
-                              <p>
-                                {{message.body}}
-                              </p>
-                          </div>
+                                </div>
+                                <p>
+                                    {{message.body}}
+                                </p>
+                            </div>
                         </div>
                     </md-list-item>
                 </md-list>
             </md-content>
-<!-- Chat Input -->
+            <!-- Chat Input -->
             <form
               class="chat-input"
               flex="auto"
               layout="row"
-              ng-submit="chat.user.socket.emit('message', {body: chat.inputMessage, conversationId: chat.socket.conversation.currentConversation})">
+              ng-submit="chat.user.socket.emit('message', {body: chat.inputMessage, conversationId: chat.socket.conversation.currentConversation}); chat.inputMessage='';">
                 <md-input-container class="message-input" flex="grow">
                     <label for="inputMessage"></label>
-                    <input
-                      type="text"
-                      name="inputMessage"
-                      ng-model="chat.inputMessage" />
+                    <input type="text" name="inputMessage" ng-model="chat.inputMessage" />
                 </md-input-container>
                 <div flex="auto">
-                    <md-button
-                      md-no-ink="true"
-                      type="submit"
-                      name="send"
-                      class="md-icon-button md-primary">
+                    <md-button md-no-ink="true" type="submit" name="send" class="md-icon-button md-primary">
                         <i class="material-icons">send</i>
-                      </md-button>
+                    </md-button>
                 </div>
             </form>
         </div>
-<!-- Conversation Metadata Pane -->
-        <md-sidenav
-          md-is-locked-open='true'
-          class="chat-info-container md-whiteframe-2dp"
-          flex="25"
-          layout="column">
+        <!-- Conversation Metadata Pane -->
+        <md-sidenav md-is-locked-open='true' class="chat-info-container md-whiteframe-2dp" flex="25" layout="column">
             <h4>Tags</h4>
-            <div
-              class="tag-cloud"
-              layout="row"
-              ng-click="chat.removeFilter()"
-              layout-wrap>
-                <md-button
-                  ng-style="{color: ('#' + chat.intToRGB(chat.hashCode(tag)))}"
-                  md-no-ink="true" class="md-raised tag"
-                  ng-repeat="tag in chat.socket.conversation.tags"
-                  ng-click="chat.filterConversation(tag); chat.setActiveFilter($index); $event.stopPropagation()"
-                  ng-class="{active : $index == chat.selectedFilter}">
+            <div class="tag-cloud" layout="row" ng-click="chat.removeFilter()" layout-wrap>
+                <md-button ng-style="{color: ('#' + chat.intToRGB(chat.hashCode(tag)))}" md-no-ink="true" class="md-raised tag" ng-repeat="tag in chat.socket.conversation.tags" ng-click="chat.filterConversation(tag); chat.setActiveFilter($index); $event.stopPropagation()"
+                    ng-class="{active : $index == chat.selectedFilter}">
                     {{tag}}
                 </md-button>
             </div>

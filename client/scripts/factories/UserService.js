@@ -43,37 +43,42 @@ myApp.factory('UserService', ['$http', '$location', 'SocketService', function($h
     },
     //Removes a contact
     removeContact: function (id) {
-      $http.delete('/user/remove/' + id).then(function(response){
-        console.log('addContact response', response);
-        if (response.status !== 200) {
-          alert("Request Failed");
-        } else {
+      return $http.delete('/user/remove/' + id).then(
+        function(response){
+          console.log('addContact response', response);
           userObject.data = response.data;
+          return true;
+        },
+        function (error) {
+          return false;
         }
-      });
+      );
     },
     //Accepts a contact request
     acceptContact: function (id) {
-      $http.put('/user/accept', {_id: id}).then(function(response){
-        console.log('addContact response', response);
-        if (response.status !== 200) {
-          alert("Request Failed");
-        } else {
+      return $http.put('/user/accept', {_id: id}).then(
+        function(response){
+          console.log('addContact response', response);
           userObject.data = response.data;
+          return true;
+        },
+        function (error) {
+          return false;
         }
-      });
+      );
     },
     //Create a new conversation
     createConversation: function (conversationParticipantIds) {
-      $http.post('/user/conversation/add', { conversationParticipantIds}).then(function(response){
-        console.log('addContact response', response);
-        if (response.status !== 200) {
-          alert("Request Failed");
-        } else {
+      $http.post('/user/conversation/add', { conversationParticipantIds}).then(
+        function(response){
+          console.log('addContact response', response);
           userObject.data = response.data;
+          return true;
+        },
+        function (error) {
+          return false;
         }
-
-      });
+      );
     },
     //Log the user out
     logout : function() {
