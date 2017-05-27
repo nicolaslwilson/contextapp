@@ -34,7 +34,7 @@ function init(_http, _memStore) {
   io.use(passportSocketIo.authorize({
     cookieParser: cookieParser,       // the same middleware you registrer in express
     key:          'user',       // the name of the cookie where express/connect stores its session_id
-    secret:       'secret',    // the session_secret to parse the cookie
+    secret:       process.env.SESSION_SECRET || 'secret',    // the session_secret to parse the cookie
     store:        memStore,        // we NEED to use a sessionstore. no memorystore please
     success:      onAuthorizeSuccess,  // *optional* callback on success - read more below
     fail:         onAuthorizeFail,     // *optional* callback on fail/error - read more below
