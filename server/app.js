@@ -11,8 +11,13 @@ var expressSession = require('express-session');
 var passport = require('./strategies/userStrategy');
 // Create Session Store
 var memStore = new expressSession.MemoryStore();
+
+//Check if there is an environmental variable to use as the session secret
+var sessionSecret = process.env.SESSION_SECRET || 'secret';
+
+//Configure the express-session
 var session = expressSession({
-   secret: 'secret',
+   secret: sessionSecret,
    store: memStore,
    key: 'user', // this is the name of the req.variable. 'user' is convention, but not required
    resave: 'true',
